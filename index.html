@@ -70,7 +70,18 @@ img,svg{max-width:100%;display:block}
 }
 
 /* ================= HERO ================= */
-.hero{position:relative;padding:34px 0 8px;text-align:center}
+.hero{position:relative;padding:26px 0 8px;text-align:center}
+
+/* dealer logo — chrome line art, transparent PNG, sits on the dark page */
+.dealer{
+  width:min(300px,76%);height:auto;
+  margin:0 auto 22px;
+  filter:drop-shadow(0 0 30px rgba(198,226,60,.20)) drop-shadow(0 2px 6px rgba(0,0,0,.8));
+}
+.dealer-rule{
+  width:64px;height:2px;margin:0 auto 20px;
+  background:linear-gradient(90deg,transparent,var(--lime),transparent);
+}
 
 .badge{
   display:inline-flex;align-items:center;gap:8px;
@@ -197,10 +208,16 @@ img,svg{max-width:100%;display:block}
 }
 .prize h2 .hl{color:var(--lime-br)}
 .oilcan{width:64px;margin:14px auto 0;filter:drop-shadow(0 0 14px rgba(198,226,60,.55))}
+.prize .courtesy{
+  font-family:var(--font-cond);font-weight:600;
+  font-size:14px;letter-spacing:.15em;text-transform:uppercase;
+  color:#e6e9dd;margin:14px 0 0;
+}
+.prize .courtesy strong{color:var(--lime-glow);font-weight:700}
 .prize .fine{
   font-family:var(--font-cond);font-weight:500;
   font-size:14px;letter-spacing:.06em;color:var(--muted);
-  margin:12px 0 0;text-transform:uppercase;
+  margin:8px 0 0;text-transform:uppercase;
 }
 
 /* ================= FORM ================= */
@@ -277,6 +294,30 @@ input[aria-invalid=true]{border-color:var(--danger);box-shadow:0 0 0 3px rgba(25
 
 .two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 @media (max-width:400px){.two{grid-template-columns:1fr}}
+
+/* custom select — appearance:none kills the native arrow, so draw our own */
+.sel-wrap{position:relative}
+.sel-wrap::after{
+  content:"";position:absolute;right:16px;top:50%;
+  width:9px;height:9px;margin-top:-6px;
+  border-right:2.5px solid var(--lime-br);border-bottom:2.5px solid var(--lime-br);
+  transform:rotate(45deg);pointer-events:none;
+}
+.sel-wrap select{padding-right:40px;cursor:pointer}
+.sel-wrap select:invalid{color:#5d6353}       /* placeholder look until chosen */
+.sel-wrap select option{background:var(--ink-3);color:#fff}
+
+.optin-label{
+  font-family:var(--font-cond);font-weight:600;
+  font-size:12px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--muted);margin:22px 0 8px;
+}
+.entry-terms{
+  font-size:12.5px;line-height:1.6;color:#8d9480;
+  margin:16px 0 0;padding:12px 14px;
+  border-left:2px solid var(--edge);background:rgba(147,176,11,.04);
+}
+.entry-terms strong{color:#c2c8b4;font-weight:600}
 
 .ig-wrap{position:relative}
 .ig-wrap .at{
@@ -490,6 +531,10 @@ footer{margin:44px 0 0;padding:26px 0 40px;border-top:1px solid rgba(255,255,255
 
   <!-- ============ HERO ============ -->
   <header class="hero">
+    <img class="dealer" src="assets/golden-mile-chrysler.png" width="900" height="395"
+         alt="Golden Mile Chrysler — Driven by Excellence" fetchpriority="high">
+    <div class="dealer-rule" aria-hidden="true"></div>
+
     <div class="badge"><span class="dot"></span> Booth Entry · Saturday July 25</div>
 
     <p class="eyebrow">Thanks for stopping by<br>our booth — <em>you're in.</em></p>
@@ -522,6 +567,7 @@ footer{margin:44px 0 0;padding:26px 0 40px;border-top:1px solid rgba(255,255,255
       <circle cx="57" cy="34" r="3" fill="#c6e23c"/>
       <path d="M57 40c2.4 3.4 4 5.6 4 7.6a4 4 0 11-8 0c0-2 1.6-4.2 4-7.6z" fill="#c6e23c"/>
     </svg>
+    <p class="courtesy">Courtesy of <strong>Golden Mile Chrysler</strong></p>
     <p class="fine">Takes about 40 seconds · One entry per person</p>
   </section>
 
@@ -559,11 +605,20 @@ footer{margin:44px 0 0;padding:26px 0 40px;border-top:1px solid rgba(255,255,255
           <p class="err" data-for="email"></p>
         </div>
 
-        <div class="field">
-          <label for="phone">Phone <span class="opt">— optional</span></label>
-          <input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel"
-                 enterkeyhint="done" placeholder="(416) 555-0123">
-          <p class="err" data-for="phone"></p>
+        <div class="two">
+          <div class="field">
+            <label for="phone">Phone <span class="opt">— optional</span></label>
+            <input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel"
+                   enterkeyhint="next" placeholder="(416) 555-0123">
+            <p class="err" data-for="phone"></p>
+          </div>
+          <div class="field">
+            <label for="postal">Postal code</label>
+            <input id="postal" name="postal" type="text" autocomplete="postal-code"
+                   autocapitalize="characters" spellcheck="false" maxlength="7"
+                   enterkeyhint="done" placeholder="M4P 1A6" required>
+            <p class="err" data-for="postal"></p>
+          </div>
         </div>
 
         <div class="nav">
@@ -582,6 +637,20 @@ footer{margin:44px 0 0;padding:26px 0 40px;border-top:1px solid rgba(255,255,255
                  placeholder="2018 Toyota Supra" required>
           <p class="hint">Year, make and model — daily driver counts.</p>
           <p class="err" data-for="car"></p>
+        </div>
+
+        <div class="field">
+          <label for="intent">Thinking about your next vehicle?</label>
+          <div class="sel-wrap">
+            <select id="intent" name="intent" required>
+              <option value="" disabled selected>Pick one…</option>
+              <option value="Just here for the cars">Just here for the cars 🚗</option>
+              <option value="Maybe within a year">Maybe within a year</option>
+              <option value="Actively looking now">Actively looking now</option>
+              <option value="Want a trade-in value">Curious what my trade is worth</option>
+            </select>
+          </div>
+          <p class="err" data-for="intent"></p>
         </div>
 
         <div class="field">
@@ -640,12 +709,25 @@ footer{margin:44px 0 0;padding:26px 0 40px;border-top:1px solid rgba(255,255,255
         </label>
         <p class="err" data-for="age"></p>
 
+        <p class="optin-label">Optional — you're entered either way</p>
+
         <label class="check">
-          <input type="checkbox" id="consent" name="consent" required>
-          <span class="txt"><b>Email me about Dream Wheels &amp; The Eglinton Way.</b>
-            <small>Event news, next year's fest and the odd local offer. Unsubscribe any time.</small></span>
+          <input type="checkbox" id="consent" name="consent">
+          <span class="txt"><b>Email me</b> about Golden Mile Chrysler service offers and next year's fest.
+            <small>Unsubscribe any time.</small></span>
         </label>
-        <p class="err" data-for="consent"></p>
+
+        <label class="check">
+          <input type="checkbox" id="sms" name="sms">
+          <span class="txt"><b>Text me</b> service reminders and offers.
+            <small>Standard message rates apply. Reply STOP to opt out. Needs a phone number.</small></span>
+        </label>
+        <p class="err" data-for="sms"></p>
+
+        <p class="entry-terms">
+          By entering you confirm the details above are yours, and agree that if you win we may
+          post your <strong>first name and Instagram handle</strong> when we announce the winner.
+        </p>
 
         <div class="nav">
           <button type="button" class="btn btn-ghost" data-back>Back</button>
@@ -774,19 +856,28 @@ CONFIG.firebase = Object.assign({}, DEFAULTS.firebase, CONFIG.firebase || {});
   }
 
   /* ---------- validation ---------- */
+  // Canadian postal code: letter-digit-letter [space] digit-letter-digit,
+  // excluding the letters Canada Post never uses (D,F,I,O,Q,U and W/Z lead).
+  const POSTAL_RE = /^[ABCEGHJ-NPRSTVXY]\d[ABCEGHJ-NPRSTV-Z][ -]?\d[ABCEGHJ-NPRSTV-Z]\d$/i;
+
   const RULES = {
     first:    v => v.trim().length >= 2 || 'Please enter your first name.',
     last:     v => v.trim().length >= 2 || 'Please enter your last name.',
     email:    v => /^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test(v.trim()) || 'That email doesn’t look right.',
     phone:    v => v.trim() === '' || v.replace(/\D/g, '').length >= 10 || 'Enter 10 digits, or leave it blank.',
+    postal:   v => POSTAL_RE.test(v.trim()) || 'Looks like M4P 1A6.',
     car:      v => v.trim().length >= 2 || 'Tell us what you drive.',
+    intent:   v => v !== '' || 'Pick one — it’s a single tap.',
     ig:       v => /^[a-z0-9._]{1,30}$/i.test(v.trim().replace(/^@/, '')) || 'Just your handle — letters, numbers, . and _',
     skill:    v => (v.trim() !== '' && Number(v) === skillAnswer) || 'Not quite — check the math and try again.'
   };
+
+  // Required tick-boxes. Marketing consents are deliberately NOT in here:
+  // under CASL, consent has to be freely given, so making it a condition of
+  // entry would undermine the consent for the whole list.
   const CHECKS = {
     followed: 'Please follow the page, then tick the box.',
-    age:      'You must be 18 or older to enter.',
-    consent:  'We need your OK to email you about the draw.'
+    age:      'You must be 18 or older to enter.'
   };
 
   function showErr(name, msg) {
@@ -806,7 +897,7 @@ CONFIG.firebase = Object.assign({}, DEFAULTS.firebase, CONFIG.firebase || {});
     const scope = steps[i];
     let ok = true, firstBad = null;
 
-    $$('input', scope).forEach(input => {
+    $$('input, select', scope).forEach(input => {
       const name = input.id;
       clearErr(name);
 
@@ -827,6 +918,15 @@ CONFIG.firebase = Object.assign({}, DEFAULTS.firebase, CONFIG.firebase || {});
       }
     });
 
+    // cross-field: opting into texts needs a phone number, and phone lives
+    // back on step 1 — so say so plainly rather than silently failing.
+    if (ok && $('#sms').checked && $('#phone').value.trim() === '') {
+      showErr('sms', 'Add a phone number on step 1, or untick this.');
+      $('#sms').setAttribute('aria-invalid', 'true');
+      ok = false;
+      firstBad = firstBad || $('#sms');
+    }
+
     if (firstBad) {
       firstBad.focus({ preventScroll: true });
       firstBad.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -835,9 +935,16 @@ CONFIG.firebase = Object.assign({}, DEFAULTS.firebase, CONFIG.firebase || {});
   }
 
   // clear an error as soon as the user fixes it
-  $$('#entry input').forEach(input => {
-    const evt = input.type === 'checkbox' ? 'change' : 'input';
+  $$('#entry input, #entry select').forEach(input => {
+    const evt = (input.type === 'checkbox' || input.tagName === 'SELECT') ? 'change' : 'input';
     input.addEventListener(evt, () => clearErr(input.id));
+  });
+
+  // tidy the postal code as they type: uppercase, single space, letters/digits only
+  $('#postal').addEventListener('input', e => {
+    const el = e.target;
+    const raw = el.value.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 6);
+    el.value = raw.length > 3 ? raw.slice(0, 3) + ' ' + raw.slice(3) : raw;
   });
 
   /* ---------- step navigation ---------- */
@@ -962,11 +1069,14 @@ CONFIG.firebase = Object.assign({}, DEFAULTS.firebase, CONFIG.firebase || {});
       last:      $('#last').value.trim(),
       email:     $('#email').value.trim().toLowerCase(),
       phone:     $('#phone').value.trim(),
+      postal:    $('#postal').value.trim().toUpperCase(),
       car:       $('#car').value.trim(),
+      intent:    $('#intent').value,
       instagram: '@' + $('#ig').value.trim().replace(/^@/, ''),
       followed:  $('#followed').checked ? 'Yes' : 'No',
       age18:     $('#age').checked ? 'Yes' : 'No',
       consent:   $('#consent').checked ? 'Yes' : 'No',
+      sms:       $('#sms').checked ? 'Yes' : 'No',
       event:     'Dream Wheels on Eglinton Fest 2026'
     };
 
@@ -1025,7 +1135,8 @@ CONFIG.firebase = Object.assign({}, DEFAULTS.firebase, CONFIG.firebase || {});
   function exportCsv() {
     const rows = read(LS_ENTRIES);
     if (!rows.length) { toast('No entries stored on this device', true); return; }
-    const cols = ['ticket','timestamp','first','last','email','phone','car','instagram','followed','age18','consent'];
+    const cols = ['ticket','timestamp','first','last','email','phone','postal','car','intent',
+                  'instagram','followed','age18','consent','sms'];
     const esc = v => '"' + String(v == null ? '' : v).replace(/"/g, '""') + '"';
     const csv = [cols.join(',')].concat(rows.map(r => cols.map(c => esc(r[c])).join(','))).join('\r\n');
     const url = URL.createObjectURL(new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8' }));

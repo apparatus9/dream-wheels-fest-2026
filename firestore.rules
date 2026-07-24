@@ -25,10 +25,11 @@ service cloud.firestore {
     // Helper functions must live inside a match block — not at file top level.
     function hasExpectedShape(d) {
       return d.keys().hasAll([
-               'ticket', 'timestamp', 'first', 'last', 'email', 'phone',
-               'car', 'instagram', 'followed', 'age18', 'consent', 'event'
+               'ticket', 'timestamp', 'first', 'last', 'email', 'phone', 'postal',
+               'car', 'intent', 'instagram', 'followed', 'age18', 'consent',
+               'sms', 'event'
              ])
-             && d.size() <= 14;
+             && d.size() <= 18;
     }
 
     function hasValidText(d) {
@@ -39,12 +40,17 @@ service cloud.firestore {
           && d.car       is string && d.car.size()       > 0 && d.car.size()       <= 120
           && d.instagram is string && d.instagram.size() > 0 && d.instagram.size() <= 40
           && d.ticket    is string && d.ticket.size()    > 0 && d.ticket.size()    <= 20
-          && d.phone     is string && d.phone.size()     <= 40;
+          && d.phone     is string && d.phone.size()     <= 40
+          && d.postal    is string && d.postal.size()    >= 6 && d.postal.size()   <= 7
+          && d.intent    is string && d.intent.size()    > 0 && d.intent.size()    <= 60;
     }
 
     function hasValidConsent(d) {
       return d.followed in ['Yes', 'No']
-          && d.consent  in ['Yes', 'No']
+          // marketing consents are optional by design (CASL: consent must be
+          // freely given) — we only require that the recorded value is honest
+          && d.consent in ['Yes', 'No']
+          && d.sms     in ['Yes', 'No']
           // eligibility enforced at write time, not just in the UI
           && d.age18 == 'Yes';
     }

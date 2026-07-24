@@ -89,8 +89,8 @@ const pad = (s, n) => String(s == null ? '' : s).padEnd(n).slice(0, n);
   }
 
   if (args.includes('--csv')) {
-    const cols = ['ticket', 'timestamp', 'first', 'last', 'email', 'phone',
-                  'car', 'instagram', 'followed', 'age18', 'consent'];
+    const cols = ['ticket', 'timestamp', 'first', 'last', 'email', 'phone', 'postal',
+                  'car', 'intent', 'instagram', 'followed', 'age18', 'consent', 'sms'];
     const esc = v => '"' + String(v == null ? '' : v).replace(/"/g, '""') + '"';
     const csv = [cols.join(',')]
       .concat(rows.map(r => cols.map(c => esc(r[c])).join(',')))
@@ -110,11 +110,27 @@ const pad = (s, n) => String(s == null ? '' : s).padEnd(n).slice(0, n);
   }
 
   const consented = rows.filter(r => r.consent === 'Yes').length;
+  const textable  = rows.filter(r => r.sms === 'Yes' && r.phone).length;
+
+  // purchase intent — the reason this list is worth more than a raffle list
+  const byIntent = {};
+  for (const r of rows) byIntent[r.intent || '—'] = 1 + (byIntent[r.intent || '—'] || 0);
+  const hot = rows.filter(r => r.intent === 'Actively looking now' ||
+                               r.intent === 'Want a trade-in value').length;
+
   console.log(`
   ─────────────────────────────────────────
   Total entries        ${rows.length}
   Eligible for draw    ${eligible.length}   (18+ and follow confirmed)
   Email consent given  ${consented}   (safe to email under CASL)
+  Text consent given   ${textable}   (opted in AND gave a phone number)
+
+  PURCHASE INTENT`);
+  for (const [k, v] of Object.entries(byIntent).sort((a, b) => b[1] - a[1])) {
+    console.log('    ' + pad(k, 30) + v);
+  }
+  console.log(`
+  🔥 ${hot} sales lead${hot === 1 ? '' : 's'} — actively looking or want a trade-in value
 
   node draw.js --draw   pick the winner
   node draw.js --csv    export to entries.csv

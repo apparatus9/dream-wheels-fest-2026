@@ -30,10 +30,20 @@ const opts = {
   color: { dark: '#000000', light: '#FFFFFF' } // dark-on-light: inverted codes break many scanners
 };
 
+// Inline the dealer logo so qr.html is a single self-contained printable file.
+function logoDataUri() {
+  const p = path.join(__dirname, 'assets', 'golden-mile-chrysler.png');
+  if (!fs.existsSync(p)) return null;
+  return 'data:image/png;base64,' + fs.readFileSync(p).toString('base64');
+}
+
 (async () => {
   await QRCode.toFile('qr.png', url, opts);
   await QRCode.toFile('qr.svg', url, { ...opts, type: 'svg' });
   const dataUrl = await QRCode.toDataURL(url, opts);
+
+  const logo = logoDataUri();
+  const logoTag = logo ? `<img class="logo" src="${logo}" alt="Golden Mile Chrysler">` : '';
 
   fs.writeFileSync('qr.html', `<!doctype html>
 <meta charset="utf-8">
@@ -52,9 +62,11 @@ const opts = {
   .scan{font-size:30px;letter-spacing:.2em;text-transform:uppercase;margin:26px 0 6px;font-weight:900;color:#aecb1a}
   .url{font-family:system-ui,sans-serif;font-size:14px;color:#8d9480;word-break:break-all;max-width:520px;margin:8px auto 0}
   .foot{margin-top:22px;font-size:15px;letter-spacing:.16em;text-transform:uppercase;color:#c6e23c;font-weight:700}
+  .logo{width:340px;max-width:70%;margin:0 auto 22px;display:block}
   @media print{body{background:#050505 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}}
 </style>
 <body>
+  ${logoTag}
   <p class="eyebrow">Thanks for visiting our booth</p>
   <h1>Win Free<br><span class="hl">Oil For Life</span></h1>
   <p class="sub">Dream Wheels on Eglinton Fest 2026</p>
