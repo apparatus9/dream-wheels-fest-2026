@@ -401,16 +401,6 @@ input[aria-invalid=true]{border-color:var(--danger);box-shadow:0 0 0 3px rgba(25
 .check .txt b{color:#fff;font-weight:600}
 .check .txt small{display:block;color:var(--muted);font-size:12.5px;margin-top:3px}
 
-/* --- skill testing --- */
-.skill{
-  border:1.5px dashed var(--edge);border-radius:12px;
-  padding:16px;background:rgba(147,176,11,.05);margin:0 0 16px;
-}
-.skill .q{
-  font-family:var(--font-disp);font-size:30px;color:var(--lime-glow);
-  margin:6px 0 12px;letter-spacing:.02em;
-}
-.skill input{max-width:150px}
 
 /* --- nav buttons --- */
 .nav{display:flex;gap:10px;margin:22px 0 0}
@@ -734,15 +724,6 @@ footer{margin:44px 0 0;padding:26px 0 40px;border-top:1px solid rgba(255,255,255
         <p class="steplabel">Step 3 of 3</p>
         <h2 class="steptitle">Last bit —<br>then you're in.</h2>
 
-        <div class="skill">
-          <span class="legend">Skill-testing question <span class="opt">— required by law</span></span>
-          <div class="q" id="skillQ" aria-live="polite">&nbsp;</div>
-          <label class="sr-only" for="skill" style="position:absolute;left:-9999px">Answer the skill-testing question</label>
-          <input id="skill" name="skill" type="number" inputmode="numeric" enterkeyhint="done"
-                 placeholder="Answer" required>
-          <p class="err" data-for="skill"></p>
-        </div>
-
         <label class="check">
           <input type="checkbox" id="age" name="age" required>
           <span class="txt"><b>I'm 18 or older</b> and a resident of Ontario.
@@ -839,10 +820,10 @@ footer{margin:44px 0 0;padding:26px 0 40px;border-top:1px solid rgba(255,255,255
     <p class="motto">Driven by passion. United by community.</p>
     <p class="legal">
       No purchase necessary. Open to Ontario residents 18+. One entry per person, plus one
-      bonus entry for following @goldenmilechrysler on Instagram. A correct answer to the
-      skill-testing question is required. Winner drawn at random and announced on our
-      Instagram; we'll also contact the winner using the details above. Your information is
-      used to administer this draw and, with your consent, to send you event news — never sold.
+      bonus entry for following @goldenmilechrysler on Instagram. Winner drawn at random and
+      announced on our Instagram; we'll also contact the winner using the details above. Your
+      information is used to administer this draw and, with your consent, to send you event
+      news — never sold.
     </p>
   </footer>
 </div>
@@ -886,7 +867,6 @@ CONFIG.firebase = Object.assign({}, DEFAULTS.firebase, CONFIG.firebase || {});
   const submitBtn= $('#submitBtn');
 
   let current = 0;
-  let skillAnswer = null;
 
   /* ---------- Instagram links ---------- */
   const igUrl = 'https://www.instagram.com/' + CONFIG.igHandle + '/';
@@ -910,16 +890,6 @@ CONFIG.firebase = Object.assign({}, DEFAULTS.firebase, CONFIG.firebase || {});
     toastTimer = setTimeout(() => statusEl.classList.remove('show'), 4200);
   }
 
-  /* ---------- skill-testing question (Criminal Code s.206) ---------- */
-  function newSkillQuestion() {
-    const a = 2 + Math.floor(Math.random() * 8);   // 2..9
-    const b = 2 + Math.floor(Math.random() * 8);   // 2..9
-    const c = 1 + Math.floor(Math.random() * 20);  // 1..20
-    skillAnswer = a * b + c;
-    $('#skillQ').textContent = '(' + a + ' × ' + b + ') + ' + c + ' = ?';
-    $('#skill').value = '';
-  }
-
   /* ---------- validation ---------- */
   const RULES = {
     first:    v => v.trim().length >= 2 || 'Please enter your first name.',
@@ -928,8 +898,7 @@ CONFIG.firebase = Object.assign({}, DEFAULTS.firebase, CONFIG.firebase || {});
     phone:    v => v.trim() === '' || v.replace(/\D/g, '').length >= 10 || 'Enter 10 digits, or leave it blank.',
     car:      v => v.trim().length >= 2 || 'Tell us what you drive.',
     intent:   v => v !== '' || 'Pick one — it’s a single tap.',
-    ig:       v => /^[a-z0-9._]{1,30}$/i.test(v.trim().replace(/^@/, '')) || 'Just your handle — letters, numbers, . and _',
-    skill:    v => (v.trim() !== '' && Number(v) === skillAnswer) || 'Not quite — check the math and try again.'
+    ig:       v => /^[a-z0-9._]{1,30}$/i.test(v.trim().replace(/^@/, '')) || 'Just your handle — letters, numbers, . and _'
   };
 
   // Required tick-boxes. Marketing consents are deliberately NOT in here:
@@ -1194,7 +1163,6 @@ CONFIG.firebase = Object.assign({}, DEFAULTS.firebase, CONFIG.firebase || {});
     doneEl.classList.remove('active');
     form.style.display = '';
     progress.style.display = '';
-    newSkillQuestion();
     goTo(0);
   });
 
@@ -1218,7 +1186,6 @@ CONFIG.firebase = Object.assign({}, DEFAULTS.firebase, CONFIG.firebase || {});
   window.addEventListener('hashchange', checkHash);
 
   /* ---------- boot ---------- */
-  newSkillQuestion();
   checkHash();
   flushPending();
 })();
