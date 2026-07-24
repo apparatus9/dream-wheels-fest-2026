@@ -1,0 +1,1019 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#050505">
+<title>Dream Wheels on Eglinton Fest 2026 — Win Free Oil For Life</title>
+<meta name="description" content="Thank you for visiting our booth at Dream Wheels on Eglinton Fest 2026. Finish the questions for a chance to win free oil for life.">
+<meta property="og:title" content="Dream Wheels on Eglinton Fest 2026">
+<meta property="og:description" content="Finish the questions for a chance to win FREE OIL FOR LIFE.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@500;600;700&family=Yellowtail&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   DREAM WHEELS ON EGLINTON FEST 2026 — booth raffle entry
+   Palette sampled directly from the official flyer artwork.
+   ============================================================ */
+:root{
+  --ink:#050505;
+  --ink-2:#0b0d08;
+  --ink-3:#141710;
+  --lime:#93b00b;        /* brand core, sampled from flyer */
+  --lime-br:#aecb1a;     /* accents on dark — better contrast */
+  --lime-glow:#c6e23c;   /* highlights, halo-headlight glow */
+  --paper:#f4f6ee;
+  --muted:#9aa08c;
+  --danger:#ff5b4a;
+  --edge:rgba(174,203,26,.22);
+  --shadow:0 18px 50px -12px rgba(0,0,0,.9);
+  --font-disp:'Anton',Impact,'Haettenschweiler','Arial Narrow Bold',sans-serif;
+  --font-cond:'Barlow Condensed','Arial Narrow',system-ui,sans-serif;
+  --font-script:'Yellowtail','Brush Script MT',cursive;
+  --font-ui:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html,body{overscroll-behavior:none} /* kill pull-to-refresh + scroll chaining at the booth */
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  background:var(--ink);
+  color:var(--paper);
+  font-family:var(--font-ui);
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+img,svg{max-width:100%;display:block}
+
+/* ---------- ambient texture: asphalt grain + lime haze ---------- */
+.grain{
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  opacity:.5;mix-blend-mode:overlay;
+}
+.haze{
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(60% 40% at 50% -5%, rgba(147,176,11,.30), transparent 70%),
+    radial-gradient(45% 30% at 100% 30%, rgba(147,176,11,.14), transparent 70%),
+    radial-gradient(50% 35% at 0% 65%, rgba(147,176,11,.10), transparent 70%);
+}
+.shell{position:relative;z-index:1;max-width:640px;margin:0 auto;padding:0 20px 0}
+
+/* ---------- splatter / slash decoration ---------- */
+.slash{
+  position:absolute;pointer-events:none;
+  background:var(--lime);opacity:.85;
+}
+
+/* ================= HERO ================= */
+.hero{position:relative;padding:34px 0 8px;text-align:center}
+
+.badge{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:var(--font-cond);font-weight:600;
+  font-size:11px;letter-spacing:.19em;text-transform:uppercase;
+  color:var(--lime-glow);
+  border:1px solid var(--edge);
+  background:rgba(147,176,11,.07);
+  padding:7px 14px;border-radius:999px;
+  margin-bottom:22px;
+}
+.badge .dot{
+  width:6px;height:6px;border-radius:50%;background:var(--lime-glow);
+  box-shadow:0 0 10px 2px rgba(198,226,60,.9);
+  animation:pulse 2.2s ease-in-out infinite;
+}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.7)}}
+
+.eyebrow{
+  font-family:var(--font-disp);
+  font-size:clamp(19px,5.6vw,27px);
+  letter-spacing:.02em;text-transform:uppercase;
+  color:var(--paper);
+  margin:0 0 26px;line-height:1.12;
+  text-shadow:0 2px 0 rgba(0,0,0,.6);
+}
+.eyebrow em{font-style:normal;color:var(--lime-glow)}
+
+/* --- the logotype lockup, rebuilt in type to match the flyer --- */
+.lockup{margin:0;position:relative}
+.lockup .annual{
+  font-family:var(--font-disp);
+  font-size:clamp(11px,3vw,14px);
+  letter-spacing:.26em;text-transform:uppercase;
+  color:var(--lime-br);
+  transform:rotate(-3deg);
+  display:block;margin-bottom:2px;
+}
+.script{
+  display:block;
+  font-family:var(--font-script);
+  font-size:clamp(58px,17vw,104px);
+  line-height:.92;
+  color:#fff;
+  transform:rotate(-3.5deg);
+  padding:0 4px;
+  text-shadow:
+    3px 3px 0 var(--ink),
+    -1px -1px 0 var(--ink),
+    0 0 34px rgba(198,226,60,.42);
+}
+.rowline{
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  transform:rotate(-2deg);margin-top:-2px;
+}
+.on{
+  font-family:var(--font-disp);
+  font-size:clamp(15px,4vw,21px);
+  text-transform:uppercase;letter-spacing:.06em;color:#fff;
+}
+.eglinton{
+  font-family:var(--font-disp);
+  font-size:clamp(30px,9.2vw,56px);
+  text-transform:uppercase;letter-spacing:.005em;color:#fff;
+  text-shadow:2px 3px 0 rgba(0,0,0,.75);
+}
+.fest{
+  font-family:var(--font-disp);
+  font-size:clamp(34px,10.5vw,64px);
+  text-transform:uppercase;color:var(--lime-br);
+  letter-spacing:.01em;
+  text-shadow:0 0 30px rgba(147,176,11,.6),2px 3px 0 rgba(0,0,0,.7);
+}
+.year{color:#fff;font-style:normal;text-shadow:2px 3px 0 rgba(0,0,0,.7)}
+
+.tagbar{
+  display:inline-block;
+  margin:22px auto 0;
+  background:var(--lime);
+  color:#0a0c04;
+  font-family:var(--font-disp);
+  font-size:clamp(12px,3.5vw,16px);
+  letter-spacing:.13em;text-transform:uppercase;
+  padding:8px 20px 7px;
+  transform:skewX(-9deg);
+  box-shadow:0 6px 24px -6px rgba(147,176,11,.7);
+}
+.tagbar span{display:inline-block;transform:skewX(9deg)}
+
+/* ---------- tread divider ---------- */
+.tread{
+  height:16px;margin:30px 0 0;opacity:.5;
+  background:
+    repeating-linear-gradient(66deg,var(--lime) 0 7px,transparent 7px 15px);
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);
+          mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);
+}
+
+/* ================= PRIZE ================= */
+.prize{
+  position:relative;margin:28px 0 0;padding:26px 20px 24px;
+  border:2px solid var(--lime);
+  background:linear-gradient(180deg,rgba(147,176,11,.13),rgba(147,176,11,.03));
+  box-shadow:var(--shadow),inset 0 0 60px -20px rgba(198,226,60,.5);
+  text-align:center;
+  clip-path:polygon(0 10px,10px 0,calc(100% - 10px) 0,100% 10px,100% calc(100% - 10px),calc(100% - 10px) 100%,10px 100%,0 calc(100% - 10px));
+}
+.prize .kicker{
+  font-family:var(--font-cond);font-weight:700;
+  font-size:13px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--paper);opacity:.85;margin:0 0 6px;
+}
+.prize .win{
+  font-family:var(--font-cond);font-weight:700;
+  font-size:15px;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--lime-glow);margin:0 0 10px;
+}
+.prize h2{
+  font-family:var(--font-disp);
+  font-size:clamp(38px,12.5vw,70px);
+  line-height:.9;margin:0;
+  text-transform:uppercase;color:#fff;
+  text-shadow:0 0 40px rgba(198,226,60,.45);
+}
+.prize h2 .hl{color:var(--lime-br)}
+.oilcan{width:64px;margin:14px auto 0;filter:drop-shadow(0 0 14px rgba(198,226,60,.55))}
+.prize .fine{
+  font-family:var(--font-cond);font-weight:500;
+  font-size:14px;letter-spacing:.06em;color:var(--muted);
+  margin:12px 0 0;text-transform:uppercase;
+}
+
+/* ================= FORM ================= */
+.formwrap{margin:30px 0 0}
+
+.progress{
+  display:flex;gap:6px;margin:0 0 22px;
+}
+.progress .seg{
+  flex:1;height:4px;border-radius:2px;
+  background:rgba(255,255,255,.11);
+  overflow:hidden;position:relative;
+}
+.progress .seg i{
+  position:absolute;inset:0;transform:scaleX(0);transform-origin:left;
+  background:linear-gradient(90deg,var(--lime),var(--lime-glow));
+  box-shadow:0 0 14px rgba(198,226,60,.8);
+  transition:transform .45s cubic-bezier(.2,.8,.2,1);
+}
+.progress .seg.on i{transform:scaleX(1)}
+
+.step{display:none;animation:slidein .38s cubic-bezier(.2,.8,.2,1)}
+.step.active{display:block}
+@keyframes slidein{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+.steplabel{
+  font-family:var(--font-cond);font-weight:600;
+  font-size:12px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--lime-br);margin:0 0 4px;
+}
+.steptitle{
+  font-family:var(--font-disp);
+  font-size:clamp(26px,7.4vw,36px);
+  text-transform:uppercase;line-height:1.02;
+  margin:0 0 20px;color:#fff;
+}
+
+.field{margin:0 0 16px;position:relative}
+.field label,.legend{
+  display:block;
+  font-family:var(--font-cond);font-weight:600;
+  font-size:13px;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--paper);margin:0 0 7px;
+}
+.field .opt{color:var(--muted);letter-spacing:.08em}
+.field .hint{
+  font-family:var(--font-ui);font-size:12.5px;letter-spacing:0;
+  text-transform:none;color:var(--muted);margin:6px 0 0;
+}
+
+input[type=text],input[type=email],input[type=tel],input[type=number],select{
+  width:100%;
+  font-family:var(--font-ui);font-size:16px; /* 16px stops iOS zoom-on-focus */
+  color:#fff;
+  background:var(--ink-3);
+  border:1.5px solid rgba(255,255,255,.14);
+  border-radius:10px;
+  padding:14px 14px;
+  transition:border-color .18s,box-shadow .18s,background .18s;
+  appearance:none;
+}
+input::placeholder{color:#5d6353}
+input:focus,select:focus{
+  outline:none;
+  border-color:var(--lime-br);
+  background:#171b12;
+  box-shadow:0 0 0 3px rgba(147,176,11,.2),0 0 22px -4px rgba(198,226,60,.55);
+}
+input[aria-invalid=true]{border-color:var(--danger);box-shadow:0 0 0 3px rgba(255,91,74,.16)}
+.err{
+  display:none;color:var(--danger);font-size:12.5px;margin:6px 0 0;font-weight:500;
+}
+.err.show{display:block}
+
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:400px){.two{grid-template-columns:1fr}}
+
+.ig-wrap{position:relative}
+.ig-wrap .at{
+  position:absolute;left:14px;top:50%;transform:translateY(-50%);
+  color:var(--muted);font-size:16px;pointer-events:none;
+}
+.ig-wrap input{padding-left:30px}
+
+/* --- follow button --- */
+.followbtn{
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  width:100%;margin:0 0 12px;
+  padding:15px 16px;border-radius:12px;
+  border:1.5px solid var(--edge);
+  background:linear-gradient(135deg,rgba(147,176,11,.16),rgba(147,176,11,.05));
+  color:#fff;text-decoration:none;
+  font-family:var(--font-cond);font-weight:700;
+  font-size:16px;letter-spacing:.12em;text-transform:uppercase;
+  transition:transform .12s,box-shadow .18s,border-color .18s;
+}
+.followbtn:active{transform:scale(.98)}
+.followbtn:hover{border-color:var(--lime-br);box-shadow:0 0 26px -6px rgba(198,226,60,.5)}
+.followbtn svg{width:20px;height:20px;flex:none}
+
+/* --- checkboxes --- */
+.check{
+  display:flex;gap:12px;align-items:flex-start;
+  padding:14px;margin:0 0 10px;
+  border:1.5px solid rgba(255,255,255,.12);
+  border-radius:11px;
+  background:var(--ink-2);
+  cursor:pointer;
+  transition:border-color .18s,background .18s;
+}
+.check:has(input:checked){
+  border-color:var(--lime-br);
+  background:rgba(147,176,11,.11);
+}
+.check:has(input[aria-invalid=true]){border-color:var(--danger)}
+.check input{
+  appearance:none;flex:none;
+  width:22px;height:22px;margin:1px 0 0;
+  border:2px solid rgba(255,255,255,.35);
+  border-radius:6px;background:transparent;
+  cursor:pointer;position:relative;
+  transition:background .18s,border-color .18s;
+}
+.check input:checked{background:var(--lime-br);border-color:var(--lime-br)}
+.check input:checked::after{
+  content:"";position:absolute;left:6px;top:2px;
+  width:6px;height:11px;border:solid #0a0c04;
+  border-width:0 2.5px 2.5px 0;transform:rotate(43deg);
+}
+.check input:focus-visible{outline:2px solid var(--lime-glow);outline-offset:2px}
+.check .txt{font-size:14.5px;line-height:1.45;color:#e6e9dd}
+.check .txt b{color:#fff;font-weight:600}
+.check .txt small{display:block;color:var(--muted);font-size:12.5px;margin-top:3px}
+
+/* --- skill testing --- */
+.skill{
+  border:1.5px dashed var(--edge);border-radius:12px;
+  padding:16px;background:rgba(147,176,11,.05);margin:0 0 16px;
+}
+.skill .q{
+  font-family:var(--font-disp);font-size:30px;color:var(--lime-glow);
+  margin:6px 0 12px;letter-spacing:.02em;
+}
+.skill input{max-width:150px}
+
+/* --- nav buttons --- */
+.nav{display:flex;gap:10px;margin:22px 0 0}
+.btn{
+  flex:1;
+  font-family:var(--font-disp);
+  font-size:17px;letter-spacing:.09em;text-transform:uppercase;
+  padding:17px 18px;border:none;border-radius:12px;
+  cursor:pointer;
+  transition:transform .12s,box-shadow .2s,filter .2s;
+  -webkit-tap-highlight-color:transparent;
+}
+.btn:active{transform:scale(.98)}
+.btn-primary{
+  background:linear-gradient(135deg,var(--lime-glow),var(--lime));
+  color:#0a0c04;
+  box-shadow:0 10px 34px -10px rgba(147,176,11,.95);
+}
+.btn-primary:hover{filter:brightness(1.08)}
+.btn-primary[disabled]{opacity:.55;cursor:progress;filter:none}
+.btn-ghost{
+  flex:0 0 34%;
+  background:transparent;color:var(--muted);
+  border:1.5px solid rgba(255,255,255,.16);
+}
+.btn-ghost:hover{color:#fff;border-color:rgba(255,255,255,.3)}
+
+/* ================= SUCCESS ================= */
+.done{display:none;text-align:center;padding:14px 0 0;animation:slidein .5s cubic-bezier(.2,.8,.2,1)}
+.done.active{display:block}
+.tick{
+  width:88px;height:88px;margin:0 auto 20px;border-radius:50%;
+  background:linear-gradient(135deg,var(--lime-glow),var(--lime));
+  display:grid;place-items:center;
+  box-shadow:0 0 60px -8px rgba(198,226,60,.85);
+  animation:pop .55s cubic-bezier(.2,1.4,.4,1) both;
+}
+@keyframes pop{from{transform:scale(0) rotate(-30deg)}to{transform:none}}
+.tick svg{width:44px;height:44px}
+.done h2{
+  font-family:var(--font-disp);
+  font-size:clamp(32px,9.5vw,46px);
+  text-transform:uppercase;line-height:1;margin:0 0 10px;color:#fff;
+}
+.done .sub{color:#cfd4c2;font-size:16px;margin:0 auto 22px;max-width:400px}
+.ticket{
+  border:2px dashed var(--edge);border-radius:14px;
+  padding:16px;margin:0 0 24px;background:rgba(147,176,11,.06);
+}
+.ticket .lab{
+  font-family:var(--font-cond);font-weight:600;font-size:11.5px;
+  letter-spacing:.22em;text-transform:uppercase;color:var(--muted);
+}
+.ticket .num{
+  font-family:var(--font-disp);font-size:30px;color:var(--lime-glow);
+  letter-spacing:.06em;margin-top:4px;
+}
+.done .cta-note{
+  font-family:var(--font-cond);font-weight:700;
+  font-size:15px;letter-spacing:.14em;text-transform:uppercase;
+  color:#fff;margin:0 0 12px;
+}
+.done .cta-note em{font-style:normal;color:var(--lime-glow)}
+.btn-ig{
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  padding:18px;border-radius:13px;text-decoration:none;
+  background:linear-gradient(135deg,var(--lime-glow),var(--lime));
+  color:#0a0c04;
+  font-family:var(--font-disp);font-size:18px;
+  letter-spacing:.08em;text-transform:uppercase;
+  box-shadow:0 10px 34px -10px rgba(147,176,11,.95);
+}
+.again{
+  display:inline-block;margin:22px 0 0;
+  font-family:var(--font-cond);font-weight:600;font-size:14px;
+  letter-spacing:.14em;text-transform:uppercase;
+  color:var(--muted);text-decoration:none;
+  border-bottom:1px solid rgba(255,255,255,.2);padding-bottom:2px;
+}
+.again:hover{color:var(--lime-glow);border-color:var(--lime-glow)}
+
+/* confetti */
+.confetti{position:fixed;inset:0;pointer-events:none;z-index:60;overflow:hidden}
+.confetti i{
+  position:absolute;top:-14px;width:9px;height:16px;opacity:0;
+  animation:fall linear forwards;
+}
+@keyframes fall{
+  0%{opacity:1;transform:translateY(-10px) rotate(0)}
+  100%{opacity:0;transform:translateY(105vh) rotate(760deg)}
+}
+
+/* ================= FOOTER ================= */
+footer{margin:44px 0 0;padding:26px 0 40px;border-top:1px solid rgba(255,255,255,.09);text-align:center}
+.facts{display:grid;gap:12px;margin:0 0 22px}
+.fact{
+  display:flex;gap:11px;align-items:center;justify-content:center;
+  font-family:var(--font-cond);font-weight:600;
+  font-size:15px;letter-spacing:.09em;text-transform:uppercase;color:#dfe3d4;
+}
+.fact svg{width:17px;height:17px;flex:none;color:var(--lime-br)}
+.sick{
+  font-family:var(--font-cond);font-weight:700;
+  font-size:13px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--lime-glow);margin:0 0 8px;
+}
+.motto{
+  font-family:var(--font-disp);font-size:14px;
+  letter-spacing:.11em;text-transform:uppercase;color:#fff;margin:0 0 14px;
+}
+.legal{font-size:11.5px;color:#6c7161;line-height:1.65;max-width:460px;margin:0 auto}
+.legal a{color:#8d9480}
+
+/* offline / status pill */
+.status{
+  position:fixed;left:50%;bottom:18px;transform:translateX(-50%) translateY(120%);
+  z-index:70;max-width:calc(100% - 32px);
+  background:var(--ink-3);border:1.5px solid var(--edge);
+  border-radius:999px;padding:10px 18px;
+  font-family:var(--font-cond);font-weight:600;font-size:13.5px;
+  letter-spacing:.08em;text-transform:uppercase;color:var(--lime-glow);
+  box-shadow:var(--shadow);
+  transition:transform .35s cubic-bezier(.2,.8,.2,1);
+}
+.status.show{transform:translateX(-50%) translateY(0)}
+.status.warn{color:#ffcf5b;border-color:rgba(255,207,91,.4)}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;transition-duration:.001ms!important}
+}
+</style>
+</head>
+<body>
+
+<svg class="grain" aria-hidden="true">
+  <filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3" stitchTiles="stitch"/>
+  <feColorMatrix type="saturate" values="0"/></filter>
+  <rect width="100%" height="100%" filter="url(#noise)" opacity="0.32"/>
+</svg>
+<div class="haze" aria-hidden="true"></div>
+
+<div class="shell">
+
+  <!-- ============ HERO ============ -->
+  <header class="hero">
+    <div class="badge"><span class="dot"></span> Booth Entry · Saturday July 25</div>
+
+    <p class="eyebrow">Thanks for stopping by<br>our booth — <em>you're in.</em></p>
+
+    <h1 class="lockup">
+      <span class="annual">4th Annual</span>
+      <span class="script">Dream Wheels</span>
+      <span class="rowline">
+        <span class="on">on</span>
+        <span class="eglinton">Eglinton</span>
+      </span>
+      <span class="rowline">
+        <span class="fest">Fest <em class="year">2026</em></span>
+      </span>
+    </h1>
+
+    <div class="tagbar"><span>Dream it. Build it. Drive it.</span></div>
+    <div class="tread" aria-hidden="true"></div>
+  </header>
+
+  <!-- ============ PRIZE ============ -->
+  <section class="prize">
+    <p class="kicker">Finish the questions for a chance to win</p>
+    <p class="win">Grand Prize</p>
+    <h2>Free <span class="hl">Oil</span><br>For Life</h2>
+    <svg class="oilcan" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+      <path d="M8 34h30l10-8h8v10c0 8-6 14-14 14H20c-6 0-12-5-12-12v-4z" fill="#aecb1a"/>
+      <path d="M14 34V26h14v8" stroke="#aecb1a" stroke-width="3.4" stroke-linecap="round"/>
+      <path d="M48 26l8-8" stroke="#aecb1a" stroke-width="3.4" stroke-linecap="round"/>
+      <circle cx="57" cy="34" r="3" fill="#c6e23c"/>
+      <path d="M57 40c2.4 3.4 4 5.6 4 7.6a4 4 0 11-8 0c0-2 1.6-4.2 4-7.6z" fill="#c6e23c"/>
+    </svg>
+    <p class="fine">Takes about 40 seconds · One entry per person</p>
+  </section>
+
+  <!-- ============ FORM ============ -->
+  <div class="formwrap">
+    <div class="progress" role="progressbar" aria-label="Entry progress" aria-valuemin="1" aria-valuemax="3" aria-valuenow="1">
+      <span class="seg on"><i></i></span><span class="seg"><i></i></span><span class="seg"><i></i></span>
+    </div>
+
+    <form id="entry" novalidate>
+
+      <!-- ---------- STEP 1 ---------- -->
+      <section class="step active" data-step="1">
+        <p class="steplabel">Step 1 of 3</p>
+        <h2 class="steptitle">Who are we<br>entering?</h2>
+
+        <div class="two">
+          <div class="field">
+            <label for="first">First name</label>
+            <input id="first" name="first" type="text" autocomplete="given-name" enterkeyhint="next" placeholder="Andre" required>
+            <p class="err" data-for="first"></p>
+          </div>
+          <div class="field">
+            <label for="last">Last name</label>
+            <input id="last" name="last" type="text" autocomplete="family-name" enterkeyhint="next" placeholder="Moreau" required>
+            <p class="err" data-for="last"></p>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="email">Email</label>
+          <input id="email" name="email" type="email" inputmode="email" autocomplete="email"
+                 autocapitalize="off" spellcheck="false" enterkeyhint="next" placeholder="you@email.com" required>
+          <p class="hint">This is how we reach you if you win.</p>
+          <p class="err" data-for="email"></p>
+        </div>
+
+        <div class="field">
+          <label for="phone">Phone <span class="opt">— optional</span></label>
+          <input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel"
+                 enterkeyhint="done" placeholder="(416) 555-0123">
+          <p class="err" data-for="phone"></p>
+        </div>
+
+        <div class="nav">
+          <button type="button" class="btn btn-primary" data-next>Continue</button>
+        </div>
+      </section>
+
+      <!-- ---------- STEP 2 ---------- -->
+      <section class="step" data-step="2">
+        <p class="steplabel">Step 2 of 3</p>
+        <h2 class="steptitle">What are you<br>driving?</h2>
+
+        <div class="field">
+          <label for="car">Your current car</label>
+          <input id="car" name="car" type="text" autocomplete="off" enterkeyhint="next"
+                 placeholder="2018 Toyota Supra" required>
+          <p class="hint">Year, make and model — daily driver counts.</p>
+          <p class="err" data-for="car"></p>
+        </div>
+
+        <div class="field">
+          <label for="ig">Your Instagram handle</label>
+          <div class="ig-wrap">
+            <span class="at">@</span>
+            <input id="ig" name="ig" type="text" autocomplete="off" autocapitalize="off"
+                   spellcheck="false" enterkeyhint="done" placeholder="yourhandle" required>
+          </div>
+          <p class="hint">Winners are announced on Instagram — we need this to find you.</p>
+          <p class="err" data-for="ig"></p>
+        </div>
+
+        <div class="field">
+          <span class="legend">Follow us to see the results</span>
+          <a class="followbtn" id="followLink" href="#" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <rect x="2" y="2" width="20" height="20" rx="5.5"/>
+              <circle cx="12" cy="12" r="4.2"/>
+              <circle cx="17.6" cy="6.4" r="1.3" fill="currentColor" stroke="none"/>
+            </svg>
+            <span id="followLabel">Follow on Instagram</span>
+          </a>
+          <label class="check">
+            <input type="checkbox" id="followed" name="followed" required>
+            <span class="txt"><b>I followed the page.</b>
+              <small>The draw is posted to our story and feed — if you're not following, you won't see it.</small></span>
+          </label>
+          <p class="err" data-for="followed"></p>
+        </div>
+
+        <div class="nav">
+          <button type="button" class="btn btn-ghost" data-back>Back</button>
+          <button type="button" class="btn btn-primary" data-next>Continue</button>
+        </div>
+      </section>
+
+      <!-- ---------- STEP 3 ---------- -->
+      <section class="step" data-step="3">
+        <p class="steplabel">Step 3 of 3</p>
+        <h2 class="steptitle">Last bit —<br>then you're in.</h2>
+
+        <div class="skill">
+          <span class="legend">Skill-testing question <span class="opt">— required by law</span></span>
+          <div class="q" id="skillQ" aria-live="polite">&nbsp;</div>
+          <label class="sr-only" for="skill" style="position:absolute;left:-9999px">Answer the skill-testing question</label>
+          <input id="skill" name="skill" type="number" inputmode="numeric" enterkeyhint="done"
+                 placeholder="Answer" required>
+          <p class="err" data-for="skill"></p>
+        </div>
+
+        <label class="check">
+          <input type="checkbox" id="age" name="age" required>
+          <span class="txt"><b>I'm 18 or older</b> and a resident of Ontario.
+            <small>Required to be eligible for the prize draw.</small></span>
+        </label>
+        <p class="err" data-for="age"></p>
+
+        <label class="check">
+          <input type="checkbox" id="consent" name="consent" required>
+          <span class="txt"><b>Email me about Dream Wheels &amp; The Eglinton Way.</b>
+            <small>Event news, next year's fest and the odd local offer. Unsubscribe any time.</small></span>
+        </label>
+        <p class="err" data-for="consent"></p>
+
+        <div class="nav">
+          <button type="button" class="btn btn-ghost" data-back>Back</button>
+          <button type="submit" class="btn btn-primary" id="submitBtn">Enter the draw</button>
+        </div>
+      </section>
+    </form>
+
+    <!-- ---------- SUCCESS ---------- -->
+    <div class="done" id="done" tabindex="-1">
+      <div class="tick">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#0a0c04" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M4 12.5l5.2 5.2L20 7"/>
+        </svg>
+      </div>
+      <h2>You're in the draw!</h2>
+      <p class="sub" id="doneName">Good luck — the winner takes home free oil for life.</p>
+
+      <div class="ticket">
+        <div class="lab">Your entry number</div>
+        <div class="num" id="ticketNum">—</div>
+      </div>
+
+      <p class="cta-note">Results are posted on <em>Instagram</em> — make sure you're following.</p>
+      <a class="btn-ig" id="doneIg" href="#" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:22px;height:22px" aria-hidden="true">
+          <rect x="2" y="2" width="20" height="20" rx="5.5"/><circle cx="12" cy="12" r="4.2"/>
+          <circle cx="17.6" cy="6.4" r="1.3" fill="currentColor" stroke="none"/>
+        </svg>
+        <span id="doneIgLabel">Follow to see the winner</span>
+      </a>
+
+      <a class="again" href="#" id="again">Enter someone else →</a>
+    </div>
+  </div>
+
+  <!-- ============ FOOTER ============ -->
+  <footer>
+    <div class="facts">
+      <div class="fact">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 10h18"/></svg>
+        Saturday, July 25 · 11am – 5pm
+      </div>
+      <div class="fact">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s7-5.5 7-11a7 7 0 10-14 0c0 5.5 7 11 7 11z"/><circle cx="12" cy="10" r="2.6"/></svg>
+        533 Eglinton Ave W, Toronto
+      </div>
+    </div>
+    <p class="sick">All proceeds in support of SickKids</p>
+    <p class="motto">Driven by passion. United by community.</p>
+    <p class="legal">
+      No purchase necessary. Open to Ontario residents 18+. One entry per person.
+      A correct answer to the skill-testing question is required. Winner drawn at random
+      and announced on our Instagram; we'll also contact the winner using the details above.
+      Your information is used to administer this draw and, with your consent, to send you
+      event news — never sold.
+    </p>
+  </footer>
+</div>
+
+<div class="confetti" id="confetti" aria-hidden="true"></div>
+<div class="status" id="status" role="status"></div>
+
+<!-- Your real settings live in config.js, which is gitignored so it never gets
+     committed. Copy config.example.js -> config.js and fill it in.
+     If the file is missing the defaults below are used and the page still works. -->
+<script src="config.js"></script>
+
+<script>
+/* =============================================================
+   CONFIG — do not edit here. Put your values in config.js
+   (copy config.example.js to config.js). Anything not set there
+   falls back to the defaults below.
+   ============================================================= */
+const DEFAULTS = {
+  igHandle: 'dreamwheelsfest',
+  submitEndpoint: '',
+  eventCode: 'DW26'
+};
+const CONFIG = Object.assign({}, DEFAULTS, window.DWF_CONFIG || {});
+/* ========================================================== */
+
+(function () {
+  'use strict';
+
+  const $  = (s, r) => (r || document).querySelector(s);
+  const $$ = (s, r) => Array.from((r || document).querySelectorAll(s));
+
+  const form     = $('#entry');
+  const steps    = $$('.step');
+  const segs     = $$('.progress .seg');
+  const progress = $('.progress');
+  const doneEl   = $('#done');
+  const statusEl = $('#status');
+  const submitBtn= $('#submitBtn');
+
+  let current = 0;
+  let skillAnswer = null;
+
+  /* ---------- Instagram links ---------- */
+  const igUrl = 'https://www.instagram.com/' + CONFIG.igHandle + '/';
+  $('#followLink').href = igUrl;
+  $('#doneIg').href = igUrl;
+  $('#followLabel').textContent = 'Follow @' + CONFIG.igHandle;
+  $('#doneIgLabel').textContent = 'Follow @' + CONFIG.igHandle;
+
+  /* ---------- toast ---------- */
+  let toastTimer;
+  function toast(msg, warn) {
+    statusEl.textContent = msg;
+    statusEl.classList.toggle('warn', !!warn);
+    statusEl.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => statusEl.classList.remove('show'), 4200);
+  }
+
+  /* ---------- skill-testing question (Criminal Code s.206) ---------- */
+  function newSkillQuestion() {
+    const a = 2 + Math.floor(Math.random() * 8);   // 2..9
+    const b = 2 + Math.floor(Math.random() * 8);   // 2..9
+    const c = 1 + Math.floor(Math.random() * 20);  // 1..20
+    skillAnswer = a * b + c;
+    $('#skillQ').textContent = '(' + a + ' × ' + b + ') + ' + c + ' = ?';
+    $('#skill').value = '';
+  }
+
+  /* ---------- validation ---------- */
+  const RULES = {
+    first:    v => v.trim().length >= 2 || 'Please enter your first name.',
+    last:     v => v.trim().length >= 2 || 'Please enter your last name.',
+    email:    v => /^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test(v.trim()) || 'That email doesn’t look right.',
+    phone:    v => v.trim() === '' || v.replace(/\D/g, '').length >= 10 || 'Enter 10 digits, or leave it blank.',
+    car:      v => v.trim().length >= 2 || 'Tell us what you drive.',
+    ig:       v => /^[a-z0-9._]{1,30}$/i.test(v.trim().replace(/^@/, '')) || 'Just your handle — letters, numbers, . and _',
+    skill:    v => (v.trim() !== '' && Number(v) === skillAnswer) || 'Not quite — check the math and try again.'
+  };
+  const CHECKS = {
+    followed: 'Please follow the page, then tick the box.',
+    age:      'You must be 18 or older to enter.',
+    consent:  'We need your OK to email you about the draw.'
+  };
+
+  function showErr(name, msg) {
+    const el = $('#' + name);
+    const box = $('.err[data-for="' + name + '"]');
+    if (el) el.setAttribute('aria-invalid', 'true');
+    if (box) { box.textContent = msg; box.classList.add('show'); }
+  }
+  function clearErr(name) {
+    const el = $('#' + name);
+    const box = $('.err[data-for="' + name + '"]');
+    if (el) el.removeAttribute('aria-invalid');
+    if (box) { box.textContent = ''; box.classList.remove('show'); }
+  }
+
+  function validateStep(i) {
+    const scope = steps[i];
+    let ok = true, firstBad = null;
+
+    $$('input', scope).forEach(input => {
+      const name = input.id;
+      clearErr(name);
+
+      if (input.type === 'checkbox') {
+        if (CHECKS[name] && !input.checked) {
+          showErr(name, CHECKS[name]);
+          input.setAttribute('aria-invalid', 'true');
+          ok = false; firstBad = firstBad || input;
+        }
+        return;
+      }
+      const rule = RULES[name];
+      if (!rule) return;
+      const res = rule(input.value);
+      if (res !== true) {
+        showErr(name, res);
+        ok = false; firstBad = firstBad || input;
+      }
+    });
+
+    if (firstBad) {
+      firstBad.focus({ preventScroll: true });
+      firstBad.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    return ok;
+  }
+
+  // clear an error as soon as the user fixes it
+  $$('#entry input').forEach(input => {
+    const evt = input.type === 'checkbox' ? 'change' : 'input';
+    input.addEventListener(evt, () => clearErr(input.id));
+  });
+
+  /* ---------- step navigation ---------- */
+  function goTo(i) {
+    steps[current].classList.remove('active');
+    current = i;
+    steps[current].classList.add('active');
+    segs.forEach((s, n) => s.classList.toggle('on', n <= current));
+    progress.setAttribute('aria-valuenow', String(current + 1));
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    const focusable = $('input', steps[current]);
+    if (focusable && focusable.type !== 'checkbox') {
+      setTimeout(() => focusable.focus({ preventScroll: true }), 380);
+    }
+  }
+
+  $$('[data-next]').forEach(b => b.addEventListener('click', () => {
+    if (validateStep(current)) goTo(current + 1);
+  }));
+  $$('[data-back]').forEach(b => b.addEventListener('click', () => goTo(current - 1)));
+
+  // Enter key advances instead of submitting early
+  form.addEventListener('keydown', e => {
+    if (e.key !== 'Enter' || e.target.tagName !== 'INPUT' || e.target.type === 'checkbox') return;
+    if (current < steps.length - 1) { e.preventDefault(); $('[data-next]', steps[current]).click(); }
+  });
+
+  /* ---------- local backup store (survives dead wifi) ---------- */
+  const LS_ENTRIES = 'dwf_entries';
+  const LS_PENDING = 'dwf_pending';
+  const LS_COUNT   = 'dwf_count';
+
+  const read  = k => { try { return JSON.parse(localStorage.getItem(k) || '[]'); } catch (e) { return []; } };
+  const write = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} };
+
+  function nextTicket() {
+    let n = 0;
+    try { n = parseInt(localStorage.getItem(LS_COUNT) || '0', 10) + 1; localStorage.setItem(LS_COUNT, String(n)); }
+    catch (e) { n = Math.floor(Math.random() * 9999); }
+    return CONFIG.eventCode + '-' + String(n).padStart(4, '0');
+  }
+
+  /* ---------- send ---------- */
+  async function send(entry) {
+    if (!CONFIG.submitEndpoint) {
+      console.warn('[Dream Wheels] No submitEndpoint set — entry saved on this device only.');
+      return { queued: true };
+    }
+    // text/plain avoids a CORS preflight, which Apps Script does not answer
+    const res = await fetch(CONFIG.submitEndpoint, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(entry)
+    });
+    return { sent: true, res: res };
+  }
+
+  async function flushPending() {
+    if (!CONFIG.submitEndpoint) return;
+    const queue = read(LS_PENDING);
+    if (!queue.length) return;
+    const still = [];
+    for (const item of queue) {
+      try { await send(item); } catch (e) { still.push(item); }
+    }
+    write(LS_PENDING, still);
+    if (queue.length && !still.length) toast(queue.length + ' saved entr' + (queue.length > 1 ? 'ies' : 'y') + ' uploaded');
+  }
+  window.addEventListener('online', flushPending);
+
+  /* ---------- confetti ---------- */
+  function burst() {
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const wrap = $('#confetti');
+    const colors = ['#c6e23c', '#93b00b', '#ffffff', '#aecb1a'];
+    for (let i = 0; i < 70; i++) {
+      const p = document.createElement('i');
+      p.style.left = Math.random() * 100 + 'vw';
+      p.style.background = colors[i % colors.length];
+      p.style.animationDuration = (1.9 + Math.random() * 1.6) + 's';
+      p.style.animationDelay = (Math.random() * 0.5) + 's';
+      p.style.transform = 'rotate(' + (Math.random() * 360) + 'deg)';
+      wrap.appendChild(p);
+    }
+    setTimeout(() => { wrap.innerHTML = ''; }, 4200);
+  }
+
+  /* ---------- submit ---------- */
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
+    if (!validateStep(current)) return;
+
+    const entry = {
+      ticket:    nextTicket(),
+      timestamp: new Date().toISOString(),
+      first:     $('#first').value.trim(),
+      last:      $('#last').value.trim(),
+      email:     $('#email').value.trim().toLowerCase(),
+      phone:     $('#phone').value.trim(),
+      car:       $('#car').value.trim(),
+      instagram: '@' + $('#ig').value.trim().replace(/^@/, ''),
+      followed:  $('#followed').checked ? 'Yes' : 'No',
+      age18:     $('#age').checked ? 'Yes' : 'No',
+      consent:   $('#consent').checked ? 'Yes' : 'No',
+      event:     'Dream Wheels on Eglinton Fest 2026'
+    };
+
+    // duplicate guard — same email already entered on this device
+    const all = read(LS_ENTRIES);
+    if (all.some(x => x.email === entry.email)) {
+      showErr('email', 'That email is already entered. One entry per person.');
+      goTo(0);
+      return;
+    }
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Entering…';
+
+    all.push(entry);
+    write(LS_ENTRIES, all);           // save locally FIRST — never lose an entry
+
+    try {
+      await send(entry);
+    } catch (err) {
+      const q = read(LS_PENDING); q.push(entry); write(LS_PENDING, q);
+      toast('Saved — will upload when back online', true);
+    }
+
+    $('#ticketNum').textContent = entry.ticket;
+    $('#doneName').textContent = entry.first + ', you’re in the draw for free oil for life. Good luck!';
+    form.style.display = 'none';
+    progress.style.display = 'none';
+    doneEl.classList.add('active');
+    doneEl.focus({ preventScroll: true });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    burst();
+
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Enter the draw';
+  });
+
+  /* ---------- reset for the next person in line ---------- */
+  $('#again').addEventListener('click', e => {
+    e.preventDefault();
+    form.reset();
+    $$('#entry input').forEach(i => { clearErr(i.id); i.removeAttribute('aria-invalid'); });
+    doneEl.classList.remove('active');
+    form.style.display = '';
+    progress.style.display = '';
+    newSkillQuestion();
+    goTo(0);
+  });
+
+  /* ---------- CSV export: add #export to the URL ---------- */
+  function exportCsv() {
+    const rows = read(LS_ENTRIES);
+    if (!rows.length) { toast('No entries stored on this device', true); return; }
+    const cols = ['ticket','timestamp','first','last','email','phone','car','instagram','followed','age18','consent'];
+    const esc = v => '"' + String(v == null ? '' : v).replace(/"/g, '""') + '"';
+    const csv = [cols.join(',')].concat(rows.map(r => cols.map(c => esc(r[c])).join(','))).join('\r\n');
+    const url = URL.createObjectURL(new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8' }));
+    const a = document.createElement('a');
+    a.href = url; a.download = 'dream-wheels-entries.csv'; a.click();
+    URL.revokeObjectURL(url);
+    toast(rows.length + ' entries exported');
+  }
+  function checkHash() {
+    if (location.hash === '#export') { exportCsv(); history.replaceState(null, '', location.pathname); }
+  }
+  window.addEventListener('hashchange', checkHash);
+
+  /* ---------- boot ---------- */
+  newSkillQuestion();
+  checkHash();
+  flushPending();
+})();
+</script>
+</body>
+</html>
