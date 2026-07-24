@@ -350,9 +350,6 @@ input[aria-invalid=true]{border-color:var(--danger);box-shadow:0 0 0 3px rgba(25
 .bonus-sub{
   font-size:13px;color:#c2c8b4;margin:0 0 14px;
 }
-.bonus-choice{display:grid;gap:10px;margin-top:12px}
-.bonus-choice .btn{width:100%}
-.btn-back-wide{width:100%}
 
 /* --- follow button --- */
 .followbtn{
@@ -710,21 +707,21 @@ footer{margin:44px 0 0;padding:26px 0 40px;border-top:1px solid rgba(255,255,255
             <span id="followLabel">Follow on Instagram</span>
           </a>
 
-          <!-- state only; set by the two choice buttons below -->
-          <input type="checkbox" id="followed" name="followed" hidden>
-
-          <div class="bonus-choice">
-            <button type="button" class="btn btn-primary" data-follow="yes">
-              I followed — 2 tickets 🎟️
-            </button>
-            <button type="button" class="btn btn-ghost" data-follow="no">
-              No thanks, 1 ticket is fine
-            </button>
-          </div>
+          <label class="check">
+            <input type="checkbox" id="followed" name="followed" data-follow-opt>
+            <span class="txt"><b>I followed — give me my 2nd ticket 🎟️</b>
+              <small>Doubles your entries, and it's how you'll see if you won.</small></span>
+          </label>
+          <label class="check">
+            <input type="checkbox" id="noFollow" data-follow-opt>
+            <span class="txt"><b>No thanks — 1 ticket is fine.</b></span>
+          </label>
+          <p class="err" data-for="followChoice"></p>
         </div>
 
         <div class="nav">
-          <button type="button" class="btn btn-ghost btn-back-wide" data-back>← Back</button>
+          <button type="button" class="btn btn-ghost" data-back>Back</button>
+          <button type="button" class="btn btn-primary" data-next>Continue</button>
         </div>
       </section>
 
@@ -956,6 +953,18 @@ CONFIG.firebase = Object.assign({}, DEFAULTS.firebase, CONFIG.firebase || {});
       }
     });
 
+    // step 2: one of the two follow options must be ticked before continuing.
+    const followOpt = $('[data-follow-opt]', scope);
+    if (followOpt) {
+      clearErr('followChoice');
+      const picked = $$('[data-follow-opt]', scope).some(o => o.checked);
+      if (!picked) {
+        showErr('followChoice', 'Tick one — follow for a 2nd ticket, or “no thanks”.');
+        ok = false;
+        firstBad = firstBad || $('#followed');
+      }
+    }
+
     // cross-field: opting into texts needs a phone number, and phone lives
     // back on step 1 — so say so plainly rather than silently failing.
     if (ok && $('#sms').checked && $('#phone').value.trim() === '') {
@@ -996,22 +1005,21 @@ CONFIG.firebase = Object.assign({}, DEFAULTS.firebase, CONFIG.firebase || {});
     if (validateStep(current)) goTo(current + 1);
   }));
 
-  // Step 2's advance: you MUST pick "I followed" or "No thanks" — there is no
-  // plain Continue, so making the bonus choice is mandatory. Each button sets
-  // the follow state, then the step validates and advances.
-  $$('[data-follow]').forEach(b => b.addEventListener('click', () => {
-    $('#followed').checked = (b.dataset.follow === 'yes');
-    if (validateStep(current)) goTo(current + 1);
-  }));
-
   $$('[data-back]').forEach(b => b.addEventListener('click', () => goTo(current - 1)));
 
-  // Enter key advances instead of submitting early. On step 2 the primary
-  // choice is "I followed"; elsewhere it's the step's Continue.
+  // The two follow options behave like radios: ticking one clears the other,
+  // so exactly one can be chosen. One MUST be chosen before Continue works.
+  const followOpts = $$('[data-follow-opt]');
+  followOpts.forEach(box => box.addEventListener('change', () => {
+    if (box.checked) followOpts.forEach(o => { if (o !== box) o.checked = false; });
+    clearErr('followChoice');
+  }));
+
+  // Enter key advances instead of submitting early.
   form.addEventListener('keydown', e => {
     if (e.key !== 'Enter' || e.target.tagName !== 'INPUT' || e.target.type === 'checkbox') return;
     if (current >= steps.length - 1) return;
-    const adv = $('[data-next]', steps[current]) || $('[data-follow="yes"]', steps[current]);
+    const adv = $('[data-next]', steps[current]);
     if (adv) { e.preventDefault(); adv.click(); }
   });
 
