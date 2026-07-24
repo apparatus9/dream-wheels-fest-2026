@@ -61,15 +61,25 @@ const pad = (s, n) => String(s == null ? '' : s).padEnd(n).slice(0, n);
 
   const args = process.argv.slice(2);
 
-  // Eligible = confirmed 18+ AND confirmed they followed on Instagram.
-  const eligible = rows.filter(r => r.age18 === 'Yes' && r.followed === 'Yes');
+  // Eligibility is 18+ only. Following is no longer required to enter — it just
+  // earns a 2nd ticket, so followers get double the odds in the draw.
+  const eligible = rows.filter(r => r.age18 === 'Yes');
+  const ticketsFor = r => (r.tickets === '2' ? 2 : 1);   // trust but clamp
+  const totalTickets = eligible.reduce((n, r) => n + ticketsFor(r), 0);
 
   if (args.includes('--draw')) {
     if (!eligible.length) {
-      console.log('\n  No eligible entries (need 18+ and follow confirmed).\n');
+      console.log('\n  No eligible entries (need 18+).\n');
       process.exit(0);
     }
-    const w = eligible[Math.floor(Math.random() * eligible.length)];
+    // Weighted draw: build a pool where a 2-ticket entry appears twice, so a
+    // follower is exactly twice as likely to win as a non-follower.
+    let hit = Math.floor(Math.random() * totalTickets);
+    let w = eligible[0];
+    for (const r of eligible) {
+      hit -= ticketsFor(r);
+      if (hit < 0) { w = r; break; }
+    }
     console.log(`
   ╔══════════════════════════════════════════════════╗
   ║   🏆  WINNER — FREE OIL FOR LIFE                 ║
@@ -78,19 +88,20 @@ const pad = (s, n) => String(s == null ? '' : s).padEnd(n).slice(0, n);
      Name        ${w.first} ${w.last}
      Ticket      ${w.ticket}
      Instagram   ${w.instagram}
+     Tickets     ${ticketsFor(w)} ${w.followed === 'Yes' ? '(followed — bonus)' : ''}
      Email       ${w.email}
      Phone       ${w.phone || '—'}
      Drives      ${w.car}
 
-     Drawn at random from ${eligible.length} eligible entries
-     (${rows.length} total entries).
+     Drawn from ${eligible.length} eligible entrants holding
+     ${totalTickets} tickets in total.
 `);
     process.exit(0);
   }
 
   if (args.includes('--csv')) {
     const cols = ['ticket', 'timestamp', 'first', 'last', 'email', 'phone',
-                  'car', 'intent', 'instagram', 'followed', 'age18', 'consent', 'sms'];
+                  'car', 'intent', 'instagram', 'followed', 'tickets', 'age18', 'consent', 'sms'];
     const esc = v => '"' + String(v == null ? '' : v).replace(/"/g, '""') + '"';
     const csv = [cols.join(',')]
       .concat(rows.map(r => cols.map(c => esc(r[c])).join(',')))
@@ -111,6 +122,7 @@ const pad = (s, n) => String(s == null ? '' : s).padEnd(n).slice(0, n);
 
   const consented = rows.filter(r => r.consent === 'Yes').length;
   const textable  = rows.filter(r => r.sms === 'Yes' && r.phone).length;
+  const followers = rows.filter(r => r.followed === 'Yes').length;
 
   // purchase intent — the reason this list is worth more than a raffle list
   const byIntent = {};
@@ -120,8 +132,10 @@ const pad = (s, n) => String(s == null ? '' : s).padEnd(n).slice(0, n);
 
   console.log(`
   ─────────────────────────────────────────
-  Total entries        ${rows.length}
-  Eligible for draw    ${eligible.length}   (18+ and follow confirmed)
+  Total entrants       ${rows.length}
+  Eligible for draw    ${eligible.length}   (18+)
+  Instagram followers  ${followers}   (took the bonus 2nd ticket)
+  Tickets in the draw  ${totalTickets}   (followers count twice)
   Email consent given  ${consented}   (safe to email under CASL)
   Text consent given   ${textable}   (opted in AND gave a phone number)
 

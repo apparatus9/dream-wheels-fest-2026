@@ -26,10 +26,10 @@ service cloud.firestore {
     function hasExpectedShape(d) {
       return d.keys().hasAll([
                'ticket', 'timestamp', 'first', 'last', 'email', 'phone',
-               'car', 'intent', 'instagram', 'followed', 'age18', 'consent',
-               'sms', 'event'
+               'car', 'intent', 'instagram', 'followed', 'tickets', 'age18',
+               'consent', 'sms', 'event'
              ])
-             && d.size() <= 17;
+             && d.size() <= 18;
     }
 
     function hasValidText(d) {
@@ -46,6 +46,9 @@ service cloud.firestore {
 
     function hasValidConsent(d) {
       return d.followed in ['Yes', 'No']
+          // bonus ticket for following: 2 if followed, else 1. Enforce the
+          // link so nobody can hand themselves extra tickets by editing the payload.
+          && d.tickets == (d.followed == 'Yes' ? '2' : '1')
           // marketing consents are optional by design (CASL: consent must be
           // freely given) — we only require that the recorded value is honest
           && d.consent in ['Yes', 'No']

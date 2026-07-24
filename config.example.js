@@ -13,7 +13,12 @@
 window.DWF_CONFIG = {
 
   // Your Instagram handle, WITHOUT the @
-  igHandle: 'dreamwheelsfest',
+  igHandle: 'goldenmilechrysler',
+
+  // Google review link for the optional "leave a review" button on the
+  // thank-you screen. Leave '' to hide it. From Google Business Profile >
+  // Ask for reviews > copy link (looks like https://g.page/r/XXXX/review).
+  googleReviewUrl: '',
 
   // Prefix for entry ticket numbers, e.g. DW26-0001
   eventCode: 'DW26',
