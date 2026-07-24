@@ -89,7 +89,7 @@ const pad = (s, n) => String(s == null ? '' : s).padEnd(n).slice(0, n);
   }
 
   if (args.includes('--csv')) {
-    const cols = ['ticket', 'timestamp', 'first', 'last', 'email', 'phone', 'postal',
+    const cols = ['ticket', 'timestamp', 'first', 'last', 'email', 'phone',
                   'car', 'intent', 'instagram', 'followed', 'age18', 'consent', 'sms'];
     const esc = v => '"' + String(v == null ? '' : v).replace(/"/g, '""') + '"';
     const csv = [cols.join(',')]

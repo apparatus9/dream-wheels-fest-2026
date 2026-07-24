@@ -605,20 +605,11 @@ footer{margin:44px 0 0;padding:26px 0 40px;border-top:1px solid rgba(255,255,255
           <p class="err" data-for="email"></p>
         </div>
 
-        <div class="two">
-          <div class="field">
-            <label for="phone">Phone <span class="opt">— optional</span></label>
-            <input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel"
-                   enterkeyhint="next" placeholder="(416) 555-0123">
-            <p class="err" data-for="phone"></p>
-          </div>
-          <div class="field">
-            <label for="postal">Postal code</label>
-            <input id="postal" name="postal" type="text" autocomplete="postal-code"
-                   autocapitalize="characters" spellcheck="false" maxlength="7"
-                   enterkeyhint="done" placeholder="M4P 1A6" required>
-            <p class="err" data-for="postal"></p>
-          </div>
+        <div class="field">
+          <label for="phone">Phone <span class="opt">— optional</span></label>
+          <input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel"
+                 enterkeyhint="done" placeholder="(416) 555-0123">
+          <p class="err" data-for="phone"></p>
         </div>
 
         <div class="nav">
@@ -856,16 +847,11 @@ CONFIG.firebase = Object.assign({}, DEFAULTS.firebase, CONFIG.firebase || {});
   }
 
   /* ---------- validation ---------- */
-  // Canadian postal code: letter-digit-letter [space] digit-letter-digit,
-  // excluding the letters Canada Post never uses (D,F,I,O,Q,U and W/Z lead).
-  const POSTAL_RE = /^[ABCEGHJ-NPRSTVXY]\d[ABCEGHJ-NPRSTV-Z][ -]?\d[ABCEGHJ-NPRSTV-Z]\d$/i;
-
   const RULES = {
     first:    v => v.trim().length >= 2 || 'Please enter your first name.',
     last:     v => v.trim().length >= 2 || 'Please enter your last name.',
     email:    v => /^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test(v.trim()) || 'That email doesn’t look right.',
     phone:    v => v.trim() === '' || v.replace(/\D/g, '').length >= 10 || 'Enter 10 digits, or leave it blank.',
-    postal:   v => POSTAL_RE.test(v.trim()) || 'Looks like M4P 1A6.',
     car:      v => v.trim().length >= 2 || 'Tell us what you drive.',
     intent:   v => v !== '' || 'Pick one — it’s a single tap.',
     ig:       v => /^[a-z0-9._]{1,30}$/i.test(v.trim().replace(/^@/, '')) || 'Just your handle — letters, numbers, . and _',
@@ -938,13 +924,6 @@ CONFIG.firebase = Object.assign({}, DEFAULTS.firebase, CONFIG.firebase || {});
   $$('#entry input, #entry select').forEach(input => {
     const evt = (input.type === 'checkbox' || input.tagName === 'SELECT') ? 'change' : 'input';
     input.addEventListener(evt, () => clearErr(input.id));
-  });
-
-  // tidy the postal code as they type: uppercase, single space, letters/digits only
-  $('#postal').addEventListener('input', e => {
-    const el = e.target;
-    const raw = el.value.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 6);
-    el.value = raw.length > 3 ? raw.slice(0, 3) + ' ' + raw.slice(3) : raw;
   });
 
   /* ---------- step navigation ---------- */
@@ -1069,7 +1048,6 @@ CONFIG.firebase = Object.assign({}, DEFAULTS.firebase, CONFIG.firebase || {});
       last:      $('#last').value.trim(),
       email:     $('#email').value.trim().toLowerCase(),
       phone:     $('#phone').value.trim(),
-      postal:    $('#postal').value.trim().toUpperCase(),
       car:       $('#car').value.trim(),
       intent:    $('#intent').value,
       instagram: '@' + $('#ig').value.trim().replace(/^@/, ''),
@@ -1135,7 +1113,7 @@ CONFIG.firebase = Object.assign({}, DEFAULTS.firebase, CONFIG.firebase || {});
   function exportCsv() {
     const rows = read(LS_ENTRIES);
     if (!rows.length) { toast('No entries stored on this device', true); return; }
-    const cols = ['ticket','timestamp','first','last','email','phone','postal','car','intent',
+    const cols = ['ticket','timestamp','first','last','email','phone','car','intent',
                   'instagram','followed','age18','consent','sms'];
     const esc = v => '"' + String(v == null ? '' : v).replace(/"/g, '""') + '"';
     const csv = [cols.join(',')].concat(rows.map(r => cols.map(c => esc(r[c])).join(','))).join('\r\n');
