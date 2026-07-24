@@ -220,39 +220,88 @@ img,svg{max-width:100%;display:block}
   margin:8px 0 0;text-transform:uppercase;
 }
 
-/* ================= FORM ================= */
-.formwrap{margin:30px 0 0}
+/* ================= INTRO (landing) ================= */
+.intro{position:relative;padding:26px 0 8px;text-align:center}
+.btn-start{
+  width:100%;margin:26px 0 0;
+  font-size:20px;letter-spacing:.08em;
+  padding:19px 20px;
+}
+.btn-start .arw{margin-left:6px;display:inline-block}
+.intro-fine{
+  font-family:var(--font-cond);font-weight:500;
+  font-size:14px;letter-spacing:.06em;color:var(--muted);
+  margin:14px 0 0;text-transform:uppercase;
+}
+.arw{font-family:var(--font-ui);font-weight:700}
 
-.progress{
-  display:flex;gap:6px;margin:0 0 22px;
+/* ================= FORM APP ================= */
+.app{margin:8px 0 0}
+
+/* slim header: small logo + thin progress bar (dealerscan style) */
+.slim{
+  position:sticky;top:0;z-index:20;
+  padding:16px 0 12px;margin:0 0 6px;
+  background:linear-gradient(180deg,var(--ink) 72%,transparent);
 }
-.progress .seg{
-  flex:1;height:4px;border-radius:2px;
-  background:rgba(255,255,255,.11);
-  overflow:hidden;position:relative;
+.slim-logo{
+  width:150px;height:auto;margin:0 auto 12px;opacity:.92;
+  filter:drop-shadow(0 1px 4px rgba(0,0,0,.7));
 }
-.progress .seg i{
-  position:absolute;inset:0;transform:scaleX(0);transform-origin:left;
+.progress .bar{
+  height:5px;border-radius:999px;
+  background:rgba(255,255,255,.1);overflow:hidden;
+}
+.progress .bar i{
+  display:block;height:100%;width:14%;
   background:linear-gradient(90deg,var(--lime),var(--lime-glow));
-  box-shadow:0 0 14px rgba(198,226,60,.8);
-  transition:transform .45s cubic-bezier(.2,.8,.2,1);
+  box-shadow:0 0 14px rgba(198,226,60,.75);
+  border-radius:999px;
+  transition:width .45s cubic-bezier(.2,.8,.2,1);
 }
-.progress .seg.on i{transform:scaleX(1)}
+.proglabel{
+  font-family:var(--font-cond);font-weight:600;
+  font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--muted);margin:8px 0 0;text-align:right;
+}
 
-.step{display:none;animation:slidein .38s cubic-bezier(.2,.8,.2,1)}
-.step.active{display:block}
-@keyframes slidein{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+/* one-question-per-screen: directional slide */
+.step{display:none}
+.step.active{display:block;min-height:46vh}
+.step.fwd{animation:stepIn .38s cubic-bezier(.2,.8,.2,1) both}
+.step.back{animation:stepBack .38s cubic-bezier(.2,.8,.2,1) both}
+@keyframes stepIn{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
+@keyframes stepBack{from{opacity:0;transform:translateY(-26px)}to{opacity:1;transform:none}}
 
-.steplabel{
+.q-kicker{
   font-family:var(--font-cond);font-weight:600;
   font-size:12px;letter-spacing:.2em;text-transform:uppercase;
-  color:var(--lime-br);margin:0 0 4px;
+  color:var(--lime-br);margin:8px 0 6px;
 }
-.steptitle{
+.q-title{
   font-family:var(--font-disp);
-  font-size:clamp(26px,7.4vw,36px);
+  font-size:clamp(30px,8.4vw,44px);
   text-transform:uppercase;line-height:1.02;
-  margin:0 0 20px;color:#fff;
+  margin:0 0 10px;color:#fff;
+}
+.q-sub{
+  font-size:15px;color:#c2c8b4;margin:0 0 24px;line-height:1.5;
+}
+.step .q-title + .field,
+.step .two{margin-top:22px}
+
+.skip-link{
+  display:block;margin:14px auto 0;
+  background:none;border:none;cursor:pointer;
+  font-family:var(--font-cond);font-weight:600;
+  font-size:14px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--muted);
+}
+.skip-link:hover{color:var(--lime-glow)}
+
+.sr-only{
+  position:absolute;width:1px;height:1px;padding:0;margin:-1px;
+  overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;
 }
 
 .field{margin:0 0 16px;position:relative}
@@ -568,8 +617,8 @@ footer{margin:44px 0 0;padding:26px 0 40px;border-top:1px solid rgba(255,255,255
 
 <div class="shell">
 
-  <!-- ============ HERO ============ -->
-  <header class="hero">
+  <!-- ============ INTRO (landing) ============ -->
+  <section class="intro" id="intro">
     <img class="dealer" src="assets/golden-mile-chrysler.png" width="900" height="395"
          alt="Golden Mile Chrysler — Driven by Excellence" fetchpriority="high">
     <div class="dealer-rule" aria-hidden="true"></div>
@@ -592,37 +641,46 @@ footer{margin:44px 0 0;padding:26px 0 40px;border-top:1px solid rgba(255,255,255
 
     <div class="tagbar"><span>Dream it. Build it. Drive it.</span></div>
     <div class="tread" aria-hidden="true"></div>
-  </header>
 
-  <!-- ============ PRIZE ============ -->
-  <section class="prize">
-    <p class="kicker">Finish the questions for a chance to win</p>
-    <p class="win">Grand Prize</p>
-    <h2>Free <span class="hl">Oil</span><br>For Life</h2>
-    <svg class="oilcan" viewBox="0 0 64 64" fill="none" aria-hidden="true">
-      <path d="M8 34h30l10-8h8v10c0 8-6 14-14 14H20c-6 0-12-5-12-12v-4z" fill="#aecb1a"/>
-      <path d="M14 34V26h14v8" stroke="#aecb1a" stroke-width="3.4" stroke-linecap="round"/>
-      <path d="M48 26l8-8" stroke="#aecb1a" stroke-width="3.4" stroke-linecap="round"/>
-      <circle cx="57" cy="34" r="3" fill="#c6e23c"/>
-      <path d="M57 40c2.4 3.4 4 5.6 4 7.6a4 4 0 11-8 0c0-2 1.6-4.2 4-7.6z" fill="#c6e23c"/>
-    </svg>
-    <p class="courtesy">Courtesy of <strong>Golden Mile Chrysler</strong></p>
-    <p class="fine">Takes about 40 seconds · Follow us for a 2nd ticket</p>
+    <!-- prize -->
+    <section class="prize">
+      <p class="kicker">Answer a few quick questions to win</p>
+      <p class="win">Grand Prize</p>
+      <h2>Free <span class="hl">Oil</span><br>For Life</h2>
+      <svg class="oilcan" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+        <path d="M8 34h30l10-8h8v10c0 8-6 14-14 14H20c-6 0-12-5-12-12v-4z" fill="#aecb1a"/>
+        <path d="M14 34V26h14v8" stroke="#aecb1a" stroke-width="3.4" stroke-linecap="round"/>
+        <path d="M48 26l8-8" stroke="#aecb1a" stroke-width="3.4" stroke-linecap="round"/>
+        <circle cx="57" cy="34" r="3" fill="#c6e23c"/>
+        <path d="M57 40c2.4 3.4 4 5.6 4 7.6a4 4 0 11-8 0c0-2 1.6-4.2 4-7.6z" fill="#c6e23c"/>
+      </svg>
+      <p class="courtesy">Courtesy of <strong>Golden Mile Chrysler</strong></p>
+    </section>
+
+    <button type="button" class="btn btn-primary btn-start" id="startBtn">
+      Enter to win <span class="arw" aria-hidden="true">→</span>
+    </button>
+    <p class="intro-fine">Takes about 40 seconds · Follow us for a 2nd ticket</p>
   </section>
 
-  <!-- ============ FORM ============ -->
-  <div class="formwrap">
-    <div class="progress" role="progressbar" aria-label="Entry progress" aria-valuemin="1" aria-valuemax="3" aria-valuenow="1">
-      <span class="seg on"><i></i></span><span class="seg"><i></i></span><span class="seg"><i></i></span>
-    </div>
+  <!-- ============ FORM APP ============ -->
+  <div class="app" id="app" hidden>
+    <header class="slim">
+      <img class="slim-logo" src="assets/golden-mile-chrysler.png" width="900" height="395"
+           alt="Golden Mile Chrysler">
+      <div class="progress" role="progressbar" aria-label="Entry progress"
+           aria-valuemin="1" aria-valuemax="7" aria-valuenow="1">
+        <div class="bar"><i id="progFill"></i></div>
+        <p class="proglabel"><span id="progNow">1</span> of <span id="progTotal">7</span></p>
+      </div>
+    </header>
 
     <form id="entry" novalidate>
 
-      <!-- ---------- STEP 1 ---------- -->
+      <!-- STEP 1 — name -->
       <section class="step active" data-step="1">
-        <p class="steplabel">Step 1 of 3</p>
-        <h2 class="steptitle">Who are we<br>entering?</h2>
-
+        <p class="q-kicker">Let's get you entered</p>
+        <h2 class="q-title">First — who's<br>entering?</h2>
         <div class="two">
           <div class="field">
             <label for="first">First name</label>
@@ -635,42 +693,70 @@ footer{margin:44px 0 0;padding:26px 0 40px;border-top:1px solid rgba(255,255,255
             <p class="err" data-for="last"></p>
           </div>
         </div>
-
-        <div class="field">
-          <label for="email">Email</label>
-          <input id="email" name="email" type="email" inputmode="email" autocomplete="email"
-                 autocapitalize="off" spellcheck="false" enterkeyhint="next" placeholder="you@email.com" required>
-          <p class="hint">This is how we reach you if you win.</p>
-          <p class="err" data-for="email"></p>
-        </div>
-
-        <div class="field">
-          <label for="phone">Phone <span class="opt">— optional</span></label>
-          <input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel"
-                 enterkeyhint="done" placeholder="(416) 555-0123">
-          <p class="err" data-for="phone"></p>
-        </div>
-
         <div class="nav">
-          <button type="button" class="btn btn-primary" data-next>Continue</button>
+          <button type="button" class="btn btn-primary" data-next>Continue <span class="arw" aria-hidden="true">→</span></button>
         </div>
       </section>
 
-      <!-- ---------- STEP 2 ---------- -->
+      <!-- STEP 2 — email -->
       <section class="step" data-step="2">
-        <p class="steplabel">Step 2 of 3</p>
-        <h2 class="steptitle">What are you<br>driving?</h2>
-
+        <p class="q-kicker">Step 2</p>
+        <h2 class="q-title">What's your email?</h2>
+        <p class="q-sub">This is how we reach you if you win.</p>
         <div class="field">
-          <label for="car">Your current car</label>
+          <label class="sr-only" for="email">Email</label>
+          <input id="email" name="email" type="email" inputmode="email" autocomplete="email"
+                 autocapitalize="off" spellcheck="false" enterkeyhint="next" placeholder="you@email.com" required>
+          <p class="err" data-for="email"></p>
+        </div>
+        <div class="nav">
+          <button type="button" class="btn btn-ghost" data-back><span class="arw" aria-hidden="true">←</span> Back</button>
+          <button type="button" class="btn btn-primary" data-next>Continue <span class="arw" aria-hidden="true">→</span></button>
+        </div>
+      </section>
+
+      <!-- STEP 3 — phone (optional) -->
+      <section class="step" data-step="3">
+        <p class="q-kicker">Step 3</p>
+        <h2 class="q-title">Got a phone number?</h2>
+        <p class="q-sub">Optional — the fastest way to reach you on the day.</p>
+        <div class="field">
+          <label class="sr-only" for="phone">Phone number</label>
+          <input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel"
+                 enterkeyhint="next" placeholder="(416) 555-0123">
+          <p class="err" data-for="phone"></p>
+        </div>
+        <div class="nav">
+          <button type="button" class="btn btn-ghost" data-back><span class="arw" aria-hidden="true">←</span> Back</button>
+          <button type="button" class="btn btn-primary" data-next>Continue <span class="arw" aria-hidden="true">→</span></button>
+        </div>
+        <button type="button" class="skip-link" data-skip>Skip for now</button>
+      </section>
+
+      <!-- STEP 4 — car -->
+      <section class="step" data-step="4">
+        <p class="q-kicker">Step 4</p>
+        <h2 class="q-title">What do you drive?</h2>
+        <p class="q-sub">Year, make and model — your daily driver counts.</p>
+        <div class="field">
+          <label class="sr-only" for="car">Your current car</label>
           <input id="car" name="car" type="text" autocomplete="off" enterkeyhint="next"
                  placeholder="2018 Toyota Supra" required>
-          <p class="hint">Year, make and model — daily driver counts.</p>
           <p class="err" data-for="car"></p>
         </div>
+        <div class="nav">
+          <button type="button" class="btn btn-ghost" data-back><span class="arw" aria-hidden="true">←</span> Back</button>
+          <button type="button" class="btn btn-primary" data-next>Continue <span class="arw" aria-hidden="true">→</span></button>
+        </div>
+      </section>
 
+      <!-- STEP 5 — next vehicle -->
+      <section class="step" data-step="5">
+        <p class="q-kicker">Step 5</p>
+        <h2 class="q-title">Thinking about your<br>next vehicle?</h2>
+        <p class="q-sub">No wrong answer — we're just curious.</p>
         <div class="field">
-          <label for="intent">Thinking about your next vehicle?</label>
+          <label class="sr-only" for="intent">Thinking about your next vehicle?</label>
           <div class="sel-wrap">
             <select id="intent" name="intent" required>
               <option value="" disabled selected>Pick one…</option>
@@ -682,15 +768,24 @@ footer{margin:44px 0 0;padding:26px 0 40px;border-top:1px solid rgba(255,255,255
           </div>
           <p class="err" data-for="intent"></p>
         </div>
+        <div class="nav">
+          <button type="button" class="btn btn-ghost" data-back><span class="arw" aria-hidden="true">←</span> Back</button>
+          <button type="button" class="btn btn-primary" data-next>Continue <span class="arw" aria-hidden="true">→</span></button>
+        </div>
+      </section>
 
+      <!-- STEP 6 — instagram + follow bonus -->
+      <section class="step" data-step="6">
+        <p class="q-kicker">Step 6</p>
+        <h2 class="q-title">See if you won<br>on Instagram</h2>
+        <p class="q-sub">Winners are posted to our page — drop your handle so we can find you.</p>
         <div class="field">
-          <label for="ig">Your Instagram handle</label>
+          <label class="sr-only" for="ig">Your Instagram handle</label>
           <div class="ig-wrap">
             <span class="at">@</span>
             <input id="ig" name="ig" type="text" autocomplete="off" autocapitalize="off"
                    spellcheck="false" enterkeyhint="done" placeholder="yourhandle" required>
           </div>
-          <p class="hint">Winners are announced on Instagram — we need this to find you.</p>
           <p class="err" data-for="ig"></p>
         </div>
 
@@ -706,7 +801,6 @@ footer{margin:44px 0 0;padding:26px 0 40px;border-top:1px solid rgba(255,255,255
             </svg>
             <span id="followLabel">Follow on Instagram</span>
           </a>
-
           <label class="check">
             <input type="checkbox" id="followed" name="followed" data-follow-opt>
             <span class="txt"><b>I followed — give me my 2nd ticket 🎟️</b>
@@ -720,15 +814,15 @@ footer{margin:44px 0 0;padding:26px 0 40px;border-top:1px solid rgba(255,255,255
         </div>
 
         <div class="nav">
-          <button type="button" class="btn btn-ghost" data-back>Back</button>
-          <button type="button" class="btn btn-primary" data-next>Continue</button>
+          <button type="button" class="btn btn-ghost" data-back><span class="arw" aria-hidden="true">←</span> Back</button>
+          <button type="button" class="btn btn-primary" data-next>Continue <span class="arw" aria-hidden="true">→</span></button>
         </div>
       </section>
 
-      <!-- ---------- STEP 3 ---------- -->
-      <section class="step" data-step="3">
-        <p class="steplabel">Step 3 of 3</p>
-        <h2 class="steptitle">Last bit —<br>then you're in.</h2>
+      <!-- STEP 7 — finish -->
+      <section class="step" data-step="7">
+        <p class="q-kicker">Last step</p>
+        <h2 class="q-title">Last thing —<br>then you're in.</h2>
 
         <label class="check">
           <input type="checkbox" id="age" name="age" required>
@@ -758,7 +852,7 @@ footer{margin:44px 0 0;padding:26px 0 40px;border-top:1px solid rgba(255,255,255
         </p>
 
         <div class="nav">
-          <button type="button" class="btn btn-ghost" data-back>Back</button>
+          <button type="button" class="btn btn-ghost" data-back><span class="arw" aria-hidden="true">←</span> Back</button>
           <button type="submit" class="btn btn-primary" id="submitBtn">Enter the draw</button>
         </div>
       </section>
@@ -866,13 +960,21 @@ CONFIG.firebase = Object.assign({}, DEFAULTS.firebase, CONFIG.firebase || {});
 
   const form     = $('#entry');
   const steps    = $$('.step');
-  const segs     = $$('.progress .seg');
   const progress = $('.progress');
+  const progFill = $('#progFill');
+  const progNow  = $('#progNow');
+  const intro    = $('#intro');
+  const app      = $('#app');
+  const slim     = $('.slim');
   const doneEl   = $('#done');
   const statusEl = $('#status');
   const submitBtn= $('#submitBtn');
 
   let current = 0;
+
+  // total steps drive the progress bar (X of N)
+  $('#progTotal').textContent = String(steps.length);
+  progress.setAttribute('aria-valuemax', String(steps.length));
 
   /* ---------- Instagram links ---------- */
   const igUrl = 'https://www.instagram.com/' + CONFIG.igHandle + '/';
@@ -987,25 +1089,49 @@ CONFIG.firebase = Object.assign({}, DEFAULTS.firebase, CONFIG.firebase || {});
     input.addEventListener(evt, () => clearErr(input.id));
   });
 
-  /* ---------- step navigation ---------- */
-  function goTo(i) {
-    steps[current].classList.remove('active');
-    current = i;
-    steps[current].classList.add('active');
-    segs.forEach((s, n) => s.classList.toggle('on', n <= current));
+  /* ---------- progress bar ---------- */
+  function updateProgress() {
+    const pct = ((current + 1) / steps.length) * 100;
+    progFill.style.width = pct + '%';
+    progNow.textContent = String(current + 1);
     progress.setAttribute('aria-valuenow', String(current + 1));
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-    const focusable = $('input', steps[current]);
-    if (focusable && focusable.type !== 'checkbox') {
-      setTimeout(() => focusable.focus({ preventScroll: true }), 380);
-    }
   }
 
+  /* ---------- step navigation (one question per screen) ---------- */
+  function goTo(i, dir) {
+    const forward = dir !== 'back';
+    steps[current].classList.remove('active', 'fwd', 'back');
+    current = i;
+    const step = steps[current];
+    step.classList.add('active', forward ? 'fwd' : 'back');
+    updateProgress();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    // autofocus the first text field on the new screen, like dealerscan
+    const focusable = $('input:not([type=checkbox]), select', step);
+    if (focusable) setTimeout(() => focusable.focus({ preventScroll: true }), 260);
+  }
+
+  // Reveal the form from the intro screen
+  function startFlow() {
+    intro.hidden = true;
+    app.hidden = false;
+    current = 0;
+    steps.forEach((s, n) => s.classList.toggle('active', n === 0));
+    steps[0].classList.remove('back'); steps[0].classList.add('fwd');
+    updateProgress();
+    window.scrollTo({ top: 0, behavior: 'auto' });
+    const first = $('input', steps[0]);
+    if (first) setTimeout(() => first.focus({ preventScroll: true }), 260);
+  }
+  $('#startBtn').addEventListener('click', startFlow);
+
   $$('[data-next]').forEach(b => b.addEventListener('click', () => {
-    if (validateStep(current)) goTo(current + 1);
+    if (validateStep(current)) goTo(current + 1, 'fwd');
   }));
 
-  $$('[data-back]').forEach(b => b.addEventListener('click', () => goTo(current - 1)));
+  $$('[data-back]').forEach(b => b.addEventListener('click', () => goTo(current - 1, 'back')));
+
+  $$('[data-skip]').forEach(b => b.addEventListener('click', () => goTo(current + 1, 'fwd')));
 
   // The two follow options behave like radios: ticking one clears the other,
   // so exactly one can be chosen. One MUST be chosen before Continue works.
@@ -1174,7 +1300,7 @@ CONFIG.firebase = Object.assign({}, DEFAULTS.firebase, CONFIG.firebase || {});
     }
 
     form.style.display = 'none';
-    progress.style.display = 'none';
+    slim.style.display = 'none';
     doneEl.classList.add('active');
     doneEl.focus({ preventScroll: true });
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -1191,8 +1317,14 @@ CONFIG.firebase = Object.assign({}, DEFAULTS.firebase, CONFIG.firebase || {});
     $$('#entry input, #entry select').forEach(i => { clearErr(i.id); i.removeAttribute('aria-invalid'); });
     doneEl.classList.remove('active');
     form.style.display = '';
-    progress.style.display = '';
-    goTo(0);
+    slim.style.display = '';
+    // back to the intro so the next person starts fresh at the top
+    app.hidden = true;
+    intro.hidden = false;
+    current = 0;
+    steps.forEach((s, n) => s.classList.toggle('active', n === 0));
+    updateProgress();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   });
 
   /* ---------- CSV export: add #export to the URL ---------- */
