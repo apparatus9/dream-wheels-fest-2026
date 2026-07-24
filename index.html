@@ -36,6 +36,9 @@
 }
 
 *,*::before,*::after{box-sizing:border-box}
+/* a display: rule beats the UA [hidden] style, so enforce it — otherwise the
+   hidden form app renders on top of the intro. */
+[hidden]{display:none!important}
 html,body{overscroll-behavior:none;height:100%} /* kill pull-to-refresh + scroll chaining at the booth */
 html{-webkit-text-size-adjust:100%}
 body{
