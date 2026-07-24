@@ -25,3 +25,6 @@ qr.html
 .DS_Store
 Thumbs.db
 *.log
+
+# local preview scratch
+_preview*.html
