@@ -232,22 +232,21 @@ img,svg{max-width:100%;display:block}
 .intro{
   position:relative;flex:1;min-height:0;
   display:flex;flex-direction:column;align-items:center;justify-content:center;
-  gap:clamp(8px,1.9vh,18px);text-align:center;
-  padding:clamp(10px,2vh,20px) 0;
-  overflow-y:auto;                    /* safety on very short screens */
+  gap:clamp(6px,1.5vh,15px);text-align:center;
+  padding:clamp(8px,1.6vh,16px) 0;
+  overflow:hidden;                    /* kiosk: never a scrollbar */
 }
 .intro > *{margin:0}                  /* rhythm comes from the flex gap */
 .intro .prize{align-self:stretch}     /* prize + button span the column width */
-.intro .dealer{width:min(200px,44vw)} /* compact so the stack fits */
-.intro .eyebrow{font-size:clamp(15px,4.2vw,20px)}
-.intro .script{font-size:clamp(38px,min(11vw,7.4vh),72px)}
-.intro .eglinton{font-size:clamp(23px,min(6.8vw,4.4vh),42px)}
-.intro .fest{font-size:clamp(25px,min(7.6vw,5vh),46px)}
-.intro .prize{padding:clamp(12px,2vh,20px) 18px}
-.intro .prize h2{font-size:clamp(28px,min(9vw,6vh),52px)}
-.intro .prize .oilcan{width:clamp(38px,6vh,54px);margin-top:clamp(6px,1.4vh,12px)}
+.intro .dealer{width:min(180px,40vw)} /* compact so the stack fits */
+.intro .eyebrow{font-size:clamp(14px,min(3.9vw,2.4vh),19px)}
+.intro .script{font-size:clamp(34px,min(10vw,6.8vh),66px)}
+.intro .eglinton{font-size:clamp(20px,min(6.2vw,4vh),40px)}
+.intro .fest{font-size:clamp(22px,min(6.8vw,4.4vh),44px)}
+.intro .prize{padding:clamp(10px,1.7vh,18px) 18px}
+.intro .prize h2{font-size:clamp(26px,min(8.2vw,5.4vh),50px)}
 .intro .prize .kicker{margin-bottom:4px}
-.intro .prize .courtesy{margin-top:clamp(6px,1.4vh,12px)}
+.intro .prize .courtesy{margin-top:6px}
 
 .btn-start{
   width:100%;
@@ -681,15 +680,7 @@ footer{margin:44px 0 0;padding:26px 0 40px;border-top:1px solid rgba(255,255,255
     <!-- prize -->
     <section class="prize">
       <p class="kicker">Answer a few quick questions to win</p>
-      <p class="win">Grand Prize</p>
-      <h2>Free <span class="hl">Oil</span><br>For Life</h2>
-      <svg class="oilcan" viewBox="0 0 64 64" fill="none" aria-hidden="true">
-        <path d="M8 34h30l10-8h8v10c0 8-6 14-14 14H20c-6 0-12-5-12-12v-4z" fill="#aecb1a"/>
-        <path d="M14 34V26h14v8" stroke="#aecb1a" stroke-width="3.4" stroke-linecap="round"/>
-        <path d="M48 26l8-8" stroke="#aecb1a" stroke-width="3.4" stroke-linecap="round"/>
-        <circle cx="57" cy="34" r="3" fill="#c6e23c"/>
-        <path d="M57 40c2.4 3.4 4 5.6 4 7.6a4 4 0 11-8 0c0-2 1.6-4.2 4-7.6z" fill="#c6e23c"/>
-      </svg>
+      <h2>Free <span class="hl">Oil</span> For Life</h2>
       <p class="courtesy">Courtesy of <strong>Golden Mile Chrysler</strong></p>
     </section>
 
