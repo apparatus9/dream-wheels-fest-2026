@@ -722,10 +722,11 @@ footer{margin:44px 0 0;padding:26px 0 40px;border-top:1px solid rgba(255,255,255
    ============================================================= */
 const DEFAULTS = {
   igHandle: 'dreamwheelsfest',
-  submitEndpoint: '',
-  eventCode: 'DW26'
+  eventCode: 'DW26',
+  firebase: { projectId: '', apiKey: '', collection: 'entries' }
 };
 const CONFIG = Object.assign({}, DEFAULTS, window.DWF_CONFIG || {});
+CONFIG.firebase = Object.assign({}, DEFAULTS.firebase, CONFIG.firebase || {});
 /* ========================================================== */
 
 (function () {
@@ -879,24 +880,48 @@ const CONFIG = Object.assign({}, DEFAULTS, window.DWF_CONFIG || {});
     return CONFIG.eventCode + '-' + String(n).padStart(4, '0');
   }
 
-  /* ---------- send ---------- */
+  /* ---------- send: Firestore REST API ----------
+     Using REST rather than the Firebase SDK keeps this page a single
+     self-contained file with no external scripts to load at the booth.
+     projectId and apiKey are NOT secrets — they identify the project.
+     Access is controlled by firestore.rules (create-only, no reads).   */
+  const fb = CONFIG.firebase;
+  const configured = () => Boolean(fb.projectId && fb.apiKey);
+
+  // Firestore's REST format needs each value tagged with its type.
+  function toFirestoreFields(obj) {
+    const fields = {};
+    for (const [k, v] of Object.entries(obj)) fields[k] = { stringValue: String(v == null ? '' : v) };
+    return fields;
+  }
+
   async function send(entry) {
-    if (!CONFIG.submitEndpoint) {
-      console.warn('[Dream Wheels] No submitEndpoint set — entry saved on this device only.');
+    if (!configured()) {
+      console.warn('[Dream Wheels] Firebase not configured in config.js — entry saved on this device only.');
       return { queued: true };
     }
-    // text/plain avoids a CORS preflight, which Apps Script does not answer
-    const res = await fetch(CONFIG.submitEndpoint, {
+
+    const url = 'https://firestore.googleapis.com/v1/projects/' + fb.projectId +
+                '/databases/(default)/documents/' + fb.collection +
+                '?key=' + encodeURIComponent(fb.apiKey);
+
+    const res = await fetch(url, {
       method: 'POST',
-      mode: 'no-cors',
-      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-      body: JSON.stringify(entry)
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ fields: toFirestoreFields(entry) })
     });
-    return { sent: true, res: res };
+
+    // Unlike the old no-CORS approach, we get a real answer back here.
+    if (!res.ok) {
+      let detail = '';
+      try { detail = (await res.json()).error.message; } catch (e) { detail = res.statusText; }
+      throw new Error('Firestore ' + res.status + ': ' + detail);
+    }
+    return { sent: true };
   }
 
   async function flushPending() {
-    if (!CONFIG.submitEndpoint) return;
+    if (!configured()) return;
     const queue = read(LS_PENDING);
     if (!queue.length) return;
     const still = [];
@@ -959,11 +984,16 @@ const CONFIG = Object.assign({}, DEFAULTS, window.DWF_CONFIG || {});
     all.push(entry);
     write(LS_ENTRIES, all);           // save locally FIRST — never lose an entry
 
+    // The entrant always sees success — their entry is already safe on this
+    // device and will sync. Any problem is surfaced to whoever runs the booth.
     try {
       await send(entry);
     } catch (err) {
       const q = read(LS_PENDING); q.push(entry); write(LS_PENDING, q);
-      toast('Saved — will upload when back online', true);
+      console.error('[Dream Wheels] upload failed, queued for retry:', err);
+      const offline = !navigator.onLine;
+      toast(offline ? 'Saved — will upload when back online'
+                    : 'Saved on device — check booth setup', true);
     }
 
     $('#ticketNum').textContent = entry.ticket;

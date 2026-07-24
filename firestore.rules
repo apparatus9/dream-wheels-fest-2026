@@ -1,0 +1,66 @@
+rules_version = '2';
+
+// ============================================================================
+// Dream Wheels on Eglinton Fest 2026 — Firestore security rules
+//
+// PASTE THIS into Firebase console > Firestore Database > Rules > Publish.
+//
+// The shape of this is deliberate:
+//   - Anyone can CREATE an entry (that's the public form doing its job).
+//   - NOBODY can READ, UPDATE or DELETE from the web.
+//
+// That last part matters: your entrants' names, emails and phone numbers live
+// in this collection. Read access is closed, so even though the project's
+// apiKey is visible in the deployed page, nobody can pull your entry list.
+// You read the data as the project owner — in the Firebase console, or with
+// draw.js, which authenticates using a service account key.
+//
+// DO NOT switch this to "test mode" (allow read, write: if true). Test mode
+// would let anyone on the internet download every entrant's contact details.
+// ============================================================================
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper functions must live inside a match block — not at file top level.
+    function hasExpectedShape(d) {
+      return d.keys().hasAll([
+               'ticket', 'timestamp', 'first', 'last', 'email', 'phone',
+               'car', 'instagram', 'followed', 'age18', 'consent', 'event'
+             ])
+             && d.size() <= 14;
+    }
+
+    function hasValidText(d) {
+      return d.first     is string && d.first.size()     > 0 && d.first.size()     <= 60
+          && d.last      is string && d.last.size()      > 0 && d.last.size()      <= 60
+          && d.email     is string && d.email.size()     > 3 && d.email.size()     <= 200
+          && d.email.matches('^[^@\\s]+@[^@\\s]+\\.[a-zA-Z]{2,}$')
+          && d.car       is string && d.car.size()       > 0 && d.car.size()       <= 120
+          && d.instagram is string && d.instagram.size() > 0 && d.instagram.size() <= 40
+          && d.ticket    is string && d.ticket.size()    > 0 && d.ticket.size()    <= 20
+          && d.phone     is string && d.phone.size()     <= 40;
+    }
+
+    function hasValidConsent(d) {
+      return d.followed in ['Yes', 'No']
+          && d.consent  in ['Yes', 'No']
+          // eligibility enforced at write time, not just in the UI
+          && d.age18 == 'Yes';
+    }
+
+    match /entries/{entryId} {
+      allow create: if hasExpectedShape(request.resource.data)
+                    && hasValidText(request.resource.data)
+                    && hasValidConsent(request.resource.data);
+
+      // Closed on purpose — see the note at the top of this file.
+      allow read, update, delete: if false;
+    }
+
+    // Anything not matched above is denied.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

@@ -1,93 +1,116 @@
 # Dream Wheels Fest 2026 — booth raffle form
 
-Everything is in **`index.html`**. One file, no build step. Open it by double-clicking to preview.
+The form itself is **`index.html`** — one self-contained file, no build step.
+Entries are stored in **Firebase Firestore**.
+
+```
+  Phone at the booth          GitHub Pages            Firebase Firestore
+  ──────────────────          ────────────            ──────────────────
+  scans QR                    serves the page
+  fills the form
+  hits "Enter the draw" ─────────────────────────────▶ entry saved
+        │                                                     │
+        └── also saved on the phone                            └── node draw.js --draw
+            as a backup if wifi dies                               picks the winner
+```
+
+Two free services, two different jobs. GitHub Pages serves the **page**;
+Firestore stores the **data**. You need both.
 
 ---
 
-## Before tomorrow — 3 things (about 15 min total)
+## Before the event — 4 steps (~20 min)
 
-### 1. Set your Instagram handle  ⏱ 30 seconds
+### 1. Create the Firebase project  ⏱ 5 min
 
-All confidential/config values live in **`config.js`**, which is gitignored — it never
-gets committed to GitHub. If you don't have one yet, make it from the template:
+1. Go to <https://console.firebase.google.com> → **Create a project**.
+   Name it `dream-wheels-fest`. Google Analytics is not needed — turn it off.
+2. In the left sidebar: **Build → Firestore Database → Create database**.
+3. Location: pick **`northamerica-northeast2` (Toronto)**.
+4. When it asks for a starting mode, choose **Start in production mode**.
+   (We replace the rules in step 2 anyway. Do **not** pick test mode — see the
+   warning there.)
+
+### 2. Lock down the security rules  ⏱ 2 min — do not skip
+
+In **Firestore Database → Rules**, delete what's there, paste in the entire
+contents of **`firestore.rules`** from this folder, and click **Publish**.
+
+> ⚠️ **Why this matters.** Firestore's "test mode" rules are `allow read, write: if true`
+> — that means *anyone on the internet* could download every entrant's name, email
+> and phone number. The rules in `firestore.rules` allow the public to **create** an
+> entry and nothing else: no reading, no editing, no deleting. Your entrant list
+> stays private, and you read it as the owner via `draw.js`.
+
+### 3. Wire the form to it  ⏱ 3 min
+
+1. In Firebase, click **⚙ Project settings → General**.
+2. Under **Your apps**, click the **web** icon (`</>`) to register a web app.
+   Nickname it `booth-form`. Skip Firebase Hosting.
+3. It shows you a `firebaseConfig` block. You only need two values from it:
+   `projectId` and `apiKey`.
+4. Make your local config file if you don't have one, then fill it in:
 
 ```bash
 copy config.example.js config.js
 ```
 
-Open `config.js` and set your handle:
-
 ```js
 window.DWF_CONFIG = {
-  igHandle: 'dreamwheelsfest',   // <-- your handle, WITHOUT the @
-  submitEndpoint: '',
-  eventCode: 'DW26'
+  igHandle: 'your_real_handle',      // <-- WITHOUT the @
+  eventCode: 'DW26',
+  firebase: {
+    projectId: 'dream-wheels-fest-xxxxx',
+    apiKey: 'AIzaSy................................',
+    collection: 'entries'
+  }
 };
 ```
 
-This drives the Follow button on step 2 and the big Follow button on the thank-you screen.
+> **On the apiKey:** it is *not* a secret and it's fine that it ends up visible in
+> the deployed page — that's how every Firebase web app works. It identifies your
+> project; it doesn't grant access. Your rules from step 2 are what grant access.
+> `config.js` is gitignored anyway so it stays out of public git history.
 
-> ⚠️ Because `config.js` is gitignored, it will **not** come down from a `git clone` or a
-> git-linked deploy. You must upload it to your host alongside `index.html`. If it's
-> missing the page still loads and still works — it just falls back to the placeholder
-> handle and saves entries on-device only.
+> ⚠️ Because `config.js` is gitignored it will **not** arrive via `git clone` or a
+> git-linked deploy. If you deploy from GitHub, see the note in step 4.
 
----
+### 4. Put it online and print the QR  ⏱ 8 min
 
-### 2. Hook up the entry sheet  ⏱ 5 minutes
+**Option A — GitHub Pages** (free, you're already on GitHub):
+`Settings → Pages → Source: Deploy from a branch → main / (root) → Save`.
+Live in ~1 min at `https://apparatus9.github.io/dream-wheels-fest-2026/`.
 
-Without this the form still works and still saves entries **on the phone/tablet it was
-filled on**, but you won't get a central spreadsheet. Do this one.
+Because `config.js` is gitignored, GitHub Pages won't have your settings. Either
+commit it (`git add -f config.js`) — harmless, since neither value is secret and
+your rules do the protecting — or use Option B.
 
-1. Go to <https://sheets.new> — a blank Google Sheet. Name it "Dream Wheels Entries".
-2. **Extensions → Apps Script**.
-3. Delete whatever is in the editor. Paste in the entire contents of `google-apps-script.gs`.
-4. Save (💾).
-5. **Deploy → New deployment**. Click the ⚙️ next to "Select type" → **Web app**.
-   - Description: `entries`
-   - **Execute as: Me**
-   - **Who has access: Anyone**  ← this one matters, it won't work otherwise
-6. **Deploy**. Google will ask you to authorize — click through
-   *Advanced → Go to (project) → Allow*. This warning is normal for your own scripts.
-7. Copy the **Web app URL**. It ends in `/exec`.
-8. Paste it into `submitEndpoint` in **`config.js`** (not `index.html`):
-
-```js
-submitEndpoint: 'https://script.google.com/macros/s/AKfy..../exec',
-```
-
-Submit a test entry. A row should appear in the sheet within a second or two.
-
-> If you ever edit the Apps Script, you must **Deploy → Manage deployments → ✏️ → New version**
-> for the change to go live. Editing alone doesn't update the URL.
-
----
-
-### 3. Put it online + make the QR  ⏱ 5 minutes
-
-The page has to be on a real URL for people to scan it. Easiest free options:
-
-**Netlify Drop** (no account needed to start): go to <https://app.netlify.com/drop>
-and drag this whole folder onto the page. You get a live URL instantly.
-
-**Cloudflare Pages**: `npx wrangler pages deploy . --project-name=dream-wheels-fest --branch=main`
-
-**Vercel**: `npm i -g vercel` then `vercel --prod` in this folder.
-
-> Heads up from your notes: Cloudflare Pages projects created by direct upload do **not**
-> auto-deploy from git pushes. If you change `index.html` later, re-run the deploy command.
+**Option B — upload from your disk** (keeps `config.js` out of git entirely):
+drag this folder onto <https://app.netlify.com/drop>, or run `vercel --prod`.
 
 Then generate the booth QR:
 
 ```bash
-npm install qrcode
+npm install
 node generate-qr.js https://your-live-url.com
 ```
 
-That writes `qr.svg` (print this), `qr.png`, and `qr.html` — a branded, ready-to-print
-booth sign. Open `qr.html` and hit Ctrl+P.
+That writes `qr.svg` (print this one), `qr.png`, and `qr.html` — a branded,
+ready-to-print booth sign. Open `qr.html` and hit Ctrl+P.
 
-**Scan the printed QR with your own phone before you print 20 of them.**
+**Scan the printed QR with your own phone before you print twenty of them.**
+
+---
+
+### ✅ Then test it end to end
+
+Open the live URL, submit a real entry, and confirm it appears in
+**Firebase console → Firestore Database → `entries`**.
+
+Unlike the old spreadsheet approach, the form now gets a real answer back from
+the server. If a save fails you'll see a **"Saved on device — check booth setup"**
+toast at the bottom of the screen, and the reason is logged to the browser console.
+No news is good news.
 
 ---
 
@@ -99,56 +122,79 @@ booth sign. Open `qr.html` and hit Ctrl+P.
 | Email | ✅ | Contact the winner |
 | Phone | — | Optional, faster to reach on the day |
 | Current car | ✅ | You asked for it — also great post-event content |
-| Instagram handle | ✅ | Your results go out on IG; you need this to verify the follow and DM them |
+| Instagram handle | ✅ | Results go out on IG; needed to verify the follow and DM them |
 | "I followed the page" | ✅ | The mechanic you described |
 | Skill-testing question | ✅ | See below |
 | 18+ / Ontario resident | ✅ | Prize eligibility |
 | Email consent | ✅ | See below |
 
 ### Why the skill-testing question
-Under s.206 of the Criminal Code, a prize contest in Canada that's pure chance is
-technically an illegal lottery. Adding a skill-testing question (the standard is a
-four-step arithmetic problem — which is exactly what's generated) is what makes it a
-legal contest. It's the reason every Tim Hortons and radio-station contest has one.
+Under s.206 of the Criminal Code, a prize contest in Canada decided purely by
+chance is technically an illegal lottery. A skill-testing question — the standard
+being a four-step arithmetic problem, which is exactly what's generated — is what
+makes it a legal contest. It's why every Tim Hortons and radio contest has one.
 A fresh question is generated for each entrant.
 
 ### Why the consent checkbox
-CASL — Canada's anti-spam legislation. If you want to email these people afterward about
-next year's fest, you need express consent recorded at the moment you collected the address.
-You cannot go back and get it later for 300 addresses. The sheet logs a Yes/No per entrant,
-which is your proof if it's ever questioned.
+CASL, Canada's anti-spam legislation. To email these people later about next
+year's fest you need express consent recorded at the moment you collected the
+address. You can't go back and get it afterward for 300 addresses. Each entry
+stores a Yes/No, and `draw.js` tells you how many consented.
 
-I am not a lawyer and this isn't legal advice — but these two checkboxes cost you nothing
-and are what every Canadian promo runs.
+I'm not a lawyer and this isn't legal advice — but these two checkboxes cost
+nothing and are what every Canadian promo runs.
 
 ---
 
 ## Running the booth
 
-**Entries never get lost, even if the wifi dies.** Every submission is written to the
-device's local storage *before* it tries to upload. If the network is down, it queues and
-auto-uploads when the connection comes back.
+**Entries can't be lost, even if the wifi dies.** Every submission is written to
+the device's storage *before* it tries to upload. If the network is down it queues
+and uploads automatically when the connection returns.
 
-- **"Enter someone else →"** on the thank-you screen resets the form for the next person
-  in line. That's the button to hand back with the phone/tablet.
-- **Emergency CSV export**: add `#export` to the end of the URL and load it — downloads
-  every entry stored on *that device*. Use this if the Sheet connection failed.
-- **Duplicate guard**: the same email can't be entered twice on the same device.
+- **"Enter someone else →"** on the thank-you screen resets the form for the next
+  person in line. That's the button to hand back with the phone or tablet.
+- **Emergency CSV export:** add `#export` to the end of the URL and load it —
+  downloads every entry stored on *that device*. Your safety net if Firebase was
+  misconfigured all day.
+- **Duplicate guard:** the same email can't be entered twice on the same device.
 
-## Drawing the winner
+## Reading entries and drawing the winner
 
-In the Google Sheet, use the **🏁 Dream Wheels → Draw a winner** menu (it appears after
-you reload the sheet once the script is installed). It picks one random entry from
-everyone who confirmed 18+ *and* confirmed the follow, and shows you their name, ticket
-number, Instagram handle and contact info.
+One-time setup, so you can read the database from your laptop:
+
+1. Firebase console → **⚙ Project settings → Service accounts**
+2. **Generate new private key** → a `.json` file downloads
+3. Rename it `serviceAccount.json` and put it in this folder
+4. `npm install`
+
+> 🔐 **This file is a real secret** — unlike the apiKey, it grants full admin
+> access to your database. It's gitignored. Don't email it or commit it. If it
+> ever leaks, revoke it on that same Service accounts page.
+
+Then:
+
+```bash
+node draw.js          # list all entries + totals
+node draw.js --csv    # export entries.csv
+node draw.js --draw   # 🏆 pick a random winner
+```
+
+`--draw` only considers entries that confirmed **18+** *and* confirmed the
+**Instagram follow**, and prints the winner's name, ticket number, handle and
+contact details.
 
 ---
 
 ## Files
 
-| File | What it is |
-|---|---|
-| `index.html` | The whole landing page + form. This is the deliverable. |
-| `google-apps-script.gs` | Paste into your Google Sheet. Collects entries + draws the winner. |
-| `generate-qr.js` | Makes the booth QR code and a printable sign. |
-| `SETUP.md` | This file. |
+| File | In git? | What it is |
+|---|---|---|
+| `index.html` | ✅ | The entire landing page + 3-step form. The deliverable. |
+| `firestore.rules` | ✅ | Security rules. Paste into Firebase. **Don't skip.** |
+| `config.example.js` | ✅ | Template for `config.js`. |
+| `config.js` | 🔒 ignored | Your handle + Firebase projectId/apiKey. |
+| `serviceAccount.json` | 🔒 ignored | Firebase admin key. **Real secret.** You create this. |
+| `draw.js` | ✅ | List entries, export CSV, draw the winner. |
+| `generate-qr.js` | ✅ | Booth QR code + printable branded sign. |
+| `package.json` | ✅ | Dependencies for `draw.js` and `generate-qr.js`. |

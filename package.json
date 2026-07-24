@@ -1,0 +1,16 @@
+{
+  "name": "dream-wheels-fest-2026",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Booth raffle entry form for Dream Wheels on Eglinton Fest 2026",
+  "scripts": {
+    "entries": "node draw.js",
+    "draw": "node draw.js --draw",
+    "csv": "node draw.js --csv",
+    "qr": "node generate-qr.js"
+  },
+  "dependencies": {
+    "firebase-admin": "^13.0.0",
+    "qrcode": "^1.5.4"
+  }
+}

@@ -3,23 +3,29 @@
  *
  *     copy config.example.js config.js
  *
- * `config.js` is listed in .gitignore, so your real values never get committed.
- * This file (config.example.js) is committed so anyone cloning the repo knows
- * what to fill in.
+ * `config.js` is listed in .gitignore, so your values never get committed.
+ * This file is committed so anyone cloning the repo knows what to fill in.
  *
- * IMPORTANT: config.js is gitignored, which means it will NOT come down from a
- * `git clone` or a git-linked deploy. You must upload it to your host alongside
- * index.html, or the form will fall back to saving entries on-device only.
+ * NOTE: config.js is gitignored, which means it will NOT come down from a
+ * `git clone` or a git-linked deploy. Upload it to your host alongside
+ * index.html, or the form falls back to saving entries on-device only.
  */
 window.DWF_CONFIG = {
 
   // Your Instagram handle, WITHOUT the @
   igHandle: 'dreamwheelsfest',
 
-  // Google Apps Script Web App URL — ends in /exec. See SETUP.md step 2.
-  // Leave as '' to test locally; entries still save on the device either way.
-  submitEndpoint: '',
-
   // Prefix for entry ticket numbers, e.g. DW26-0001
-  eventCode: 'DW26'
+  eventCode: 'DW26',
+
+  // ---- Firebase / Firestore ----
+  // From Firebase console > Project settings > General > Your apps > SDK setup.
+  // These two are NOT secrets — they identify your project, nothing more.
+  // What actually protects your data is firestore.rules, which allows
+  // creating entries but forbids reading, editing or deleting them.
+  firebase: {
+    projectId: '',
+    apiKey: '',
+    collection: 'entries'
+  }
 };
