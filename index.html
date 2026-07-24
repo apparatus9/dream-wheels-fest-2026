@@ -221,17 +221,33 @@ img,svg{max-width:100%;display:block}
 }
 
 /* ================= INTRO (landing) ================= */
-.intro{position:relative;padding:26px 0 8px;text-align:center}
+.intro{
+  position:relative;
+  display:flex;flex-direction:column;align-items:center;
+  gap:22px;text-align:center;
+  padding:32px 0 16px;
+  min-height:100dvh;justify-content:center;
+}
+.intro > *{margin:0}                  /* even rhythm from the flex gap, not margins */
+.intro .prize{align-self:stretch}     /* prize + button span the column width */
+.intro .dealer{width:min(240px,62%)}  /* smaller so it doesn't crowd the stack */
+.intro .eyebrow{font-size:clamp(17px,4.6vw,22px)}
+.intro .script{font-size:clamp(46px,13.5vw,82px)}
+.intro .eglinton{font-size:clamp(26px,7.8vw,46px)}
+.intro .fest{font-size:clamp(30px,9vw,52px)}
+.intro .prize{margin-top:4px}
+.intro .prize h2{font-size:clamp(34px,11vw,58px)}
+
 .btn-start{
-  width:100%;margin:26px 0 0;
+  width:100%;
   font-size:20px;letter-spacing:.08em;
   padding:19px 20px;
 }
 .btn-start .arw{margin-left:6px;display:inline-block}
 .intro-fine{
   font-family:var(--font-cond);font-weight:500;
-  font-size:14px;letter-spacing:.06em;color:var(--muted);
-  margin:14px 0 0;text-transform:uppercase;
+  font-size:13px;letter-spacing:.06em;color:var(--muted);
+  text-transform:uppercase;
 }
 .arw{font-family:var(--font-ui);font-weight:700}
 
@@ -621,9 +637,6 @@ footer{margin:44px 0 0;padding:26px 0 40px;border-top:1px solid rgba(255,255,255
   <section class="intro" id="intro">
     <img class="dealer" src="assets/golden-mile-chrysler.png" width="900" height="395"
          alt="Golden Mile Chrysler — Driven by Excellence" fetchpriority="high">
-    <div class="dealer-rule" aria-hidden="true"></div>
-
-    <div class="badge"><span class="dot"></span> Booth Entry · Saturday July 25</div>
 
     <p class="eyebrow">Thanks for stopping by<br>our booth — <em>you're in.</em></p>
 
@@ -640,7 +653,6 @@ footer{margin:44px 0 0;padding:26px 0 40px;border-top:1px solid rgba(255,255,255
     </h1>
 
     <div class="tagbar"><span>Dream it. Build it. Drive it.</span></div>
-    <div class="tread" aria-hidden="true"></div>
 
     <!-- prize -->
     <section class="prize">
