@@ -36,7 +36,7 @@
 }
 
 *,*::before,*::after{box-sizing:border-box}
-html,body{overscroll-behavior:none} /* kill pull-to-refresh + scroll chaining at the booth */
+html,body{overscroll-behavior:none;height:100%} /* kill pull-to-refresh + scroll chaining at the booth */
 html{-webkit-text-size-adjust:100%}
 body{
   margin:0;
@@ -45,7 +45,7 @@ body{
   font-family:var(--font-ui);
   line-height:1.5;
   -webkit-font-smoothing:antialiased;
-  overflow-x:hidden;
+  overflow:hidden;               /* kiosk: the page itself never scrolls */
 }
 img,svg{max-width:100%;display:block}
 
@@ -61,7 +61,10 @@ img,svg{max-width:100%;display:block}
     radial-gradient(45% 30% at 100% 30%, rgba(147,176,11,.14), transparent 70%),
     radial-gradient(50% 35% at 0% 65%, rgba(147,176,11,.10), transparent 70%);
 }
-.shell{position:relative;z-index:1;max-width:640px;margin:0 auto;padding:0 20px 0}
+.shell{
+  position:relative;z-index:1;max-width:640px;margin:0 auto;padding:0 20px;
+  height:100dvh;display:flex;flex-direction:column;   /* kiosk column, fills the screen */
+}
 
 /* ---------- splatter / slash decoration ---------- */
 .slash{
@@ -221,43 +224,53 @@ img,svg{max-width:100%;display:block}
 }
 
 /* ================= INTRO (landing) ================= */
+/* fills the screen and centres; every size is viewport-height aware so the
+   whole thing fits one phone screen without scrolling */
 .intro{
-  position:relative;
-  display:flex;flex-direction:column;align-items:center;
-  gap:22px;text-align:center;
-  padding:32px 0 16px;
-  min-height:100dvh;justify-content:center;
+  position:relative;flex:1;min-height:0;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:clamp(8px,1.9vh,18px);text-align:center;
+  padding:clamp(10px,2vh,20px) 0;
+  overflow-y:auto;                    /* safety on very short screens */
 }
-.intro > *{margin:0}                  /* even rhythm from the flex gap, not margins */
+.intro > *{margin:0}                  /* rhythm comes from the flex gap */
 .intro .prize{align-self:stretch}     /* prize + button span the column width */
-.intro .dealer{width:min(240px,62%)}  /* smaller so it doesn't crowd the stack */
-.intro .eyebrow{font-size:clamp(17px,4.6vw,22px)}
-.intro .script{font-size:clamp(46px,13.5vw,82px)}
-.intro .eglinton{font-size:clamp(26px,7.8vw,46px)}
-.intro .fest{font-size:clamp(30px,9vw,52px)}
-.intro .prize{margin-top:4px}
-.intro .prize h2{font-size:clamp(34px,11vw,58px)}
+.intro .dealer{width:min(200px,44vw)} /* compact so the stack fits */
+.intro .eyebrow{font-size:clamp(15px,4.2vw,20px)}
+.intro .script{font-size:clamp(38px,min(11vw,7.4vh),72px)}
+.intro .eglinton{font-size:clamp(23px,min(6.8vw,4.4vh),42px)}
+.intro .fest{font-size:clamp(25px,min(7.6vw,5vh),46px)}
+.intro .prize{padding:clamp(12px,2vh,20px) 18px}
+.intro .prize h2{font-size:clamp(28px,min(9vw,6vh),52px)}
+.intro .prize .oilcan{width:clamp(38px,6vh,54px);margin-top:clamp(6px,1.4vh,12px)}
+.intro .prize .kicker{margin-bottom:4px}
+.intro .prize .courtesy{margin-top:clamp(6px,1.4vh,12px)}
 
 .btn-start{
   width:100%;
-  font-size:20px;letter-spacing:.08em;
-  padding:19px 20px;
+  font-size:clamp(17px,2.4vh,20px);letter-spacing:.08em;
+  padding:clamp(14px,2vh,19px) 20px;
 }
 .btn-start .arw{margin-left:6px;display:inline-block}
 .intro-fine{
   font-family:var(--font-cond);font-weight:500;
-  font-size:13px;letter-spacing:.06em;color:var(--muted);
+  font-size:12.5px;letter-spacing:.06em;color:var(--muted);
   text-transform:uppercase;
+}
+.intro-legal{
+  font-size:11px;letter-spacing:.03em;color:#6c7161;
 }
 .arw{font-family:var(--font-ui);font-weight:700}
 
 /* ================= FORM APP ================= */
-.app{margin:8px 0 0}
+/* fills the screen: slim header on top, the current question centred, no scroll */
+.app{flex:1;min-height:0;display:flex;flex-direction:column}
+#entry{flex:1;min-height:0;display:flex;flex-direction:column}
 
 /* slim header: small logo + thin progress bar (dealerscan style) */
 .slim{
-  position:sticky;top:0;z-index:20;
-  padding:16px 0 12px;margin:0 0 6px;
+  flex:none;
+  padding:14px 0 10px;
   background:linear-gradient(180deg,var(--ink) 72%,transparent);
 }
 .slim-logo{
@@ -281,9 +294,13 @@ img,svg{max-width:100%;display:block}
   color:var(--muted);margin:8px 0 0;text-align:right;
 }
 
-/* one-question-per-screen: directional slide */
+/* one-question-per-screen: the active step fills the space and centres */
 .step{display:none}
-.step.active{display:block;min-height:46vh}
+.step.active{
+  display:flex;flex-direction:column;justify-content:center;
+  flex:1;min-height:0;overflow-y:auto;
+  padding:8px 0 16px;
+}
 .step.fwd{animation:stepIn .38s cubic-bezier(.2,.8,.2,1) both}
 .step.back{animation:stepBack .38s cubic-bezier(.2,.8,.2,1) both}
 @keyframes stepIn{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
@@ -494,8 +511,12 @@ input[aria-invalid=true]{border-color:var(--danger);box-shadow:0 0 0 3px rgba(25
 .btn-ghost:hover{color:#fff;border-color:rgba(255,255,255,.3)}
 
 /* ================= SUCCESS ================= */
-.done{display:none;text-align:center;padding:14px 0 0;animation:slidein .5s cubic-bezier(.2,.8,.2,1)}
-.done.active{display:block}
+.done{display:none;text-align:center;animation:slidein .5s cubic-bezier(.2,.8,.2,1)}
+.done.active{
+  display:flex;flex-direction:column;justify-content:center;
+  flex:1;min-height:0;overflow-y:auto;padding:16px 0;
+}
+@keyframes slidein{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
 .tick{
   width:88px;height:88px;margin:0 auto 20px;border-radius:50%;
   background:linear-gradient(135deg,var(--lime-glow),var(--lime));
@@ -673,6 +694,7 @@ footer{margin:44px 0 0;padding:26px 0 40px;border-top:1px solid rgba(255,255,255
       Enter to win <span class="arw" aria-hidden="true">→</span>
     </button>
     <p class="intro-fine">Takes about 40 seconds · Follow us for a 2nd ticket</p>
+    <p class="intro-legal">Sat July 25 · 533 Eglinton Ave W · 18+ · In support of SickKids</p>
   </section>
 
   <!-- ============ FORM APP ============ -->
@@ -916,28 +938,6 @@ footer{margin:44px 0 0;padding:26px 0 40px;border-top:1px solid rgba(255,255,255
     </div>
   </div>
 
-  <!-- ============ FOOTER ============ -->
-  <footer>
-    <div class="facts">
-      <div class="fact">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 10h18"/></svg>
-        Saturday, July 25 · 11am – 5pm
-      </div>
-      <div class="fact">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s7-5.5 7-11a7 7 0 10-14 0c0 5.5 7 11 7 11z"/><circle cx="12" cy="10" r="2.6"/></svg>
-        533 Eglinton Ave W, Toronto
-      </div>
-    </div>
-    <p class="sick">All proceeds in support of SickKids</p>
-    <p class="motto">Driven by passion. United by community.</p>
-    <p class="legal">
-      No purchase necessary. Open to Ontario residents 18+. One entry per person, plus one
-      bonus entry for following @goldenmilechrysler on Instagram. Winner drawn at random and
-      announced on our Instagram; we'll also contact the winner using the details above. Your
-      information is used to administer this draw and, with your consent, to send you event
-      news — never sold.
-    </p>
-  </footer>
 </div>
 
 <div class="confetti" id="confetti" aria-hidden="true"></div>
