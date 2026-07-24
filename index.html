@@ -67,7 +67,9 @@ img,svg{max-width:100%;display:block}
 .shell{
   position:relative;z-index:1;max-width:640px;margin:0 auto;padding:0 20px;
   height:100dvh;display:flex;flex-direction:column;   /* kiosk column, fills the screen */
+  overflow-x:hidden;
 }
+.shell > *{min-width:0}   /* let flex children shrink to the screen instead of overflowing */
 
 /* ---------- splatter / slash decoration ---------- */
 .slash{
@@ -230,14 +232,16 @@ img,svg{max-width:100%;display:block}
 /* fills the screen and centres; every size is viewport-height aware so the
    whole thing fits one phone screen without scrolling */
 .intro{
-  position:relative;flex:1;min-height:0;
+  position:relative;flex:1;min-height:0;min-width:0;
   display:flex;flex-direction:column;align-items:center;justify-content:center;
   gap:clamp(6px,1.5vh,15px);text-align:center;
   padding:clamp(8px,1.6vh,16px) 0;
   overflow:hidden;                    /* kiosk: never a scrollbar */
 }
-.intro > *{margin:0}                  /* rhythm comes from the flex gap */
-.intro .prize{align-self:stretch}     /* prize + button span the column width */
+.intro > *{margin:0;max-width:100%;width:100%}   /* every block spans the column, so nothing overflows */
+.intro .dealer{width:min(180px,44%)}  /* logo stays small, centred by text-align */
+.intro .btn-start{flex:none}          /* don't let .btn flex:1 balloon it */
+.intro .tagbar{width:auto;max-width:100%}  /* tagbar hugs its text */
 .intro .dealer{width:min(180px,40vw)} /* compact so the stack fits */
 .intro .eyebrow{font-size:clamp(14px,min(3.9vw,2.4vh),19px)}
 .intro .script{font-size:clamp(34px,min(10vw,6.8vh),66px)}
@@ -1316,22 +1320,35 @@ CONFIG.firebase = Object.assign({}, DEFAULTS.firebase, CONFIG.firebase || {});
     submitBtn.textContent = 'Enter the draw';
   });
 
-  /* ---------- reset for the next person in line ---------- */
-  $('#again').addEventListener('click', e => {
-    e.preventDefault();
+  /* ---------- reset to the intro for the next person in line ---------- */
+  function resetToIntro() {
     form.reset();
     $$('#entry input, #entry select').forEach(i => { clearErr(i.id); i.removeAttribute('aria-invalid'); });
     doneEl.classList.remove('active');
     form.style.display = '';
     slim.style.display = '';
-    // back to the intro so the next person starts fresh at the top
     app.hidden = true;
     intro.hidden = false;
     current = 0;
     steps.forEach((s, n) => s.classList.toggle('active', n === 0));
     updateProgress();
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  });
+  }
+  $('#again').addEventListener('click', e => { e.preventDefault(); resetToIntro(); });
+
+  /* ---------- kiosk idle reset ----------
+     If someone starts the form and walks away, return to the intro after 60s
+     of no interaction so the next person doesn't land mid-entry. */
+  let idleTimer;
+  function armIdle() {
+    clearTimeout(idleTimer);
+    // only while actively filling the form (not on the intro or success screen)
+    if (!app.hidden && !doneEl.classList.contains('active')) {
+      idleTimer = setTimeout(resetToIntro, 60000);
+    }
+  }
+  ['pointerdown', 'keydown', 'input'].forEach(ev =>
+    document.addEventListener(ev, armIdle, { passive: true }));
 
   /* ---------- CSV export: add #export to the URL ---------- */
   function exportCsv() {
