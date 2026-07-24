@@ -350,6 +350,9 @@ input[aria-invalid=true]{border-color:var(--danger);box-shadow:0 0 0 3px rgba(25
 .bonus-sub{
   font-size:13px;color:#c2c8b4;margin:0 0 14px;
 }
+.bonus-choice{display:grid;gap:10px;margin-top:12px}
+.bonus-choice .btn{width:100%}
+.btn-back-wide{width:100%}
 
 /* --- follow button --- */
 .followbtn{
@@ -706,16 +709,22 @@ footer{margin:44px 0 0;padding:26px 0 40px;border-top:1px solid rgba(255,255,255
             </svg>
             <span id="followLabel">Follow on Instagram</span>
           </a>
-          <label class="check">
-            <input type="checkbox" id="followed" name="followed">
-            <span class="txt"><b>I followed — give me my 2nd ticket.</b>
-              <small>Optional, but it doubles your entries and it's how you'll see if you won.</small></span>
-          </label>
+
+          <!-- state only; set by the two choice buttons below -->
+          <input type="checkbox" id="followed" name="followed" hidden>
+
+          <div class="bonus-choice">
+            <button type="button" class="btn btn-primary" data-follow="yes">
+              I followed — 2 tickets 🎟️
+            </button>
+            <button type="button" class="btn btn-ghost" data-follow="no">
+              No thanks, 1 ticket is fine
+            </button>
+          </div>
         </div>
 
         <div class="nav">
-          <button type="button" class="btn btn-ghost" data-back>Back</button>
-          <button type="button" class="btn btn-primary" data-next>Continue</button>
+          <button type="button" class="btn btn-ghost btn-back-wide" data-back>← Back</button>
         </div>
       </section>
 
@@ -986,12 +995,24 @@ CONFIG.firebase = Object.assign({}, DEFAULTS.firebase, CONFIG.firebase || {});
   $$('[data-next]').forEach(b => b.addEventListener('click', () => {
     if (validateStep(current)) goTo(current + 1);
   }));
+
+  // Step 2's advance: you MUST pick "I followed" or "No thanks" — there is no
+  // plain Continue, so making the bonus choice is mandatory. Each button sets
+  // the follow state, then the step validates and advances.
+  $$('[data-follow]').forEach(b => b.addEventListener('click', () => {
+    $('#followed').checked = (b.dataset.follow === 'yes');
+    if (validateStep(current)) goTo(current + 1);
+  }));
+
   $$('[data-back]').forEach(b => b.addEventListener('click', () => goTo(current - 1)));
 
-  // Enter key advances instead of submitting early
+  // Enter key advances instead of submitting early. On step 2 the primary
+  // choice is "I followed"; elsewhere it's the step's Continue.
   form.addEventListener('keydown', e => {
     if (e.key !== 'Enter' || e.target.tagName !== 'INPUT' || e.target.type === 'checkbox') return;
-    if (current < steps.length - 1) { e.preventDefault(); $('[data-next]', steps[current]).click(); }
+    if (current >= steps.length - 1) return;
+    const adv = $('[data-next]', steps[current]) || $('[data-follow="yes"]', steps[current]);
+    if (adv) { e.preventDefault(); adv.click(); }
   });
 
   /* ---------- local backup store (survives dead wifi) ---------- */
