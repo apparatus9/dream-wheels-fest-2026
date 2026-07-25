@@ -61,9 +61,27 @@ const pad = (s, n) => String(s == null ? '' : s).padEnd(n).slice(0, n);
 
   const args = process.argv.slice(2);
 
+  // One entry per person: if the same email appears more than once, keep only
+  // the best (most tickets, then earliest). This is where duplicates are
+  // removed — the form lets every submission through.
+  const byEmail = new Map();
+  let dupes = 0;
+  for (const r of rows) {
+    const key = (r.email || '').trim().toLowerCase();
+    if (!key) { byEmail.set('__blank__' + byEmail.size, r); continue; }
+    const prev = byEmail.get(key);
+    if (!prev) { byEmail.set(key, r); }
+    else {
+      dupes++;
+      const better = (r.tickets === '2' ? 2 : 1) > (prev.tickets === '2' ? 2 : 1);
+      if (better) byEmail.set(key, r);
+    }
+  }
+  const unique = Array.from(byEmail.values());
+
   // Eligibility is 18+ only. Following is no longer required to enter — it just
   // earns a 2nd ticket, so followers get double the odds in the draw.
-  const eligible = rows.filter(r => r.age18 === 'Yes');
+  const eligible = unique.filter(r => r.age18 === 'Yes');
   const ticketsFor = r => (r.tickets === '2' ? 2 : 1);   // trust but clamp
   const totalTickets = eligible.reduce((n, r) => n + ticketsFor(r), 0);
 
@@ -87,7 +105,6 @@ const pad = (s, n) => String(s == null ? '' : s).padEnd(n).slice(0, n);
 
      Name        ${w.first} ${w.last}
      Ticket      ${w.ticket}
-     Instagram   ${w.instagram}
      Tickets     ${ticketsFor(w)} ${w.followed === 'Yes' ? '(followed — bonus)' : ''}
      Email       ${w.email}
      Phone       ${w.phone || '—'}
@@ -101,7 +118,7 @@ const pad = (s, n) => String(s == null ? '' : s).padEnd(n).slice(0, n);
 
   if (args.includes('--csv')) {
     const cols = ['ticket', 'timestamp', 'first', 'last', 'email', 'phone',
-                  'car', 'intent', 'instagram', 'followed', 'tickets', 'age18', 'consent', 'sms'];
+                  'car', 'intent', 'followed', 'tickets', 'age18', 'consent', 'sms'];
     const esc = v => '"' + String(v == null ? '' : v).replace(/"/g, '""') + '"';
     const csv = [cols.join(',')]
       .concat(rows.map(r => cols.map(c => esc(r[c])).join(',')))
@@ -113,16 +130,16 @@ const pad = (s, n) => String(s == null ? '' : s).padEnd(n).slice(0, n);
 
   // default: print the list
   console.log(`\n  ${rows.length} entries in "${COLLECTION}"\n`);
-  console.log('  ' + pad('TICKET', 12) + pad('NAME', 24) + pad('INSTAGRAM', 22) + 'DRIVES');
-  console.log('  ' + '─'.repeat(88));
+  console.log('  ' + pad('TICKET', 12) + pad('NAME', 24) + pad('EMAIL', 28) + 'DRIVES');
+  console.log('  ' + '─'.repeat(92));
   for (const r of rows) {
     console.log('  ' + pad(r.ticket, 12) + pad(`${r.first} ${r.last}`, 24) +
-                pad(r.instagram, 22) + String(r.car || ''));
+                pad(r.email, 28) + String(r.car || ''));
   }
 
-  const consented = rows.filter(r => r.consent === 'Yes').length;
-  const textable  = rows.filter(r => r.sms === 'Yes' && r.phone).length;
-  const followers = rows.filter(r => r.followed === 'Yes').length;
+  const consented = unique.filter(r => r.consent === 'Yes').length;
+  const textable  = unique.filter(r => r.sms === 'Yes' && r.phone).length;
+  const followers = unique.filter(r => r.followed === 'Yes').length;
 
   // purchase intent — the reason this list is worth more than a raffle list
   const byIntent = {};
@@ -132,7 +149,8 @@ const pad = (s, n) => String(s == null ? '' : s).padEnd(n).slice(0, n);
 
   console.log(`
   ─────────────────────────────────────────
-  Total entrants       ${rows.length}
+  Total submissions    ${rows.length}${dupes ? '   (' + dupes + ' duplicate email' + (dupes > 1 ? 's' : '') + ' merged)' : ''}
+  Unique people        ${unique.length}
   Eligible for draw    ${eligible.length}   (18+)
   Instagram followers  ${followers}   (took the bonus 2nd ticket)
   Tickets in the draw  ${totalTickets}   (followers count twice)

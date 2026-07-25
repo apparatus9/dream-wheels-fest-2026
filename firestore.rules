@@ -26,10 +26,10 @@ service cloud.firestore {
     function hasExpectedShape(d) {
       return d.keys().hasAll([
                'ticket', 'timestamp', 'first', 'last', 'email', 'phone',
-               'car', 'intent', 'instagram', 'followed', 'tickets', 'age18',
+               'car', 'intent', 'followed', 'tickets', 'age18',
                'consent', 'sms', 'event'
              ])
-             && d.size() <= 18;
+             && d.size() <= 17;
     }
 
     function hasValidText(d) {
@@ -38,7 +38,6 @@ service cloud.firestore {
           && d.email     is string && d.email.size()     > 3 && d.email.size()     <= 200
           && d.email.matches('^[^@\\s]+@[^@\\s]+\\.[a-zA-Z]{2,}$')
           && d.car       is string && d.car.size()       > 0 && d.car.size()       <= 120
-          && d.instagram is string && d.instagram.size() > 0 && d.instagram.size() <= 40
           && d.ticket    is string && d.ticket.size()    > 0 && d.ticket.size()    <= 20
           && d.phone     is string && d.phone.size()     <= 40
           && d.intent    is string && d.intent.size()    > 0 && d.intent.size()    <= 60;
