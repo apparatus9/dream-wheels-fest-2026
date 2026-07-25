@@ -12,6 +12,7 @@
 
 const QRCode = require('qrcode');
 const fs = require('fs');
+const path = require('path');
 
 const url = process.argv[2];
 
