@@ -7,13 +7,14 @@ rules_version = '2';
 //
 // The shape of this is deliberate:
 //   - Anyone can CREATE an entry (that's the public form doing its job).
-//   - NOBODY can READ, UPDATE or DELETE from the web.
+//   - Only the signed-in OWNER can READ (the phone dashboard signs in as them).
+//   - NOBODY can UPDATE or DELETE from the web.
 //
 // That last part matters: your entrants' names, emails and phone numbers live
-// in this collection. Read access is closed, so even though the project's
-// apiKey is visible in the deployed page, nobody can pull your entry list.
-// You read the data as the project owner — in the Firebase console, or with
-// draw.js, which authenticates using a service account key.
+// in this collection. Read is limited to the single owner account, so even
+// though the project's apiKey is visible in the deployed page, nobody else can
+// pull your entry list. The admin dashboard (admin.html) signs in as the owner
+// to read; draw.js reads via the service account key.
 //
 // DO NOT switch this to "test mode" (allow read, write: if true). Test mode
 // would let anyone on the internet download every entrant's contact details.
@@ -56,13 +57,20 @@ service cloud.firestore {
           && d.age18 == 'Yes';
     }
 
+    // The single owner account allowed to read entries (the phone dashboard).
+    function isOwner() {
+      return request.auth != null
+          && request.auth.uid == 'BnM8Ji9rI6XekSL1u5DwYwOYpmv1';
+    }
+
     match /entries/{entryId} {
       allow create: if hasExpectedShape(request.resource.data)
                     && hasValidText(request.resource.data)
                     && hasValidConsent(request.resource.data);
 
-      // Closed on purpose — see the note at the top of this file.
-      allow read, update, delete: if false;
+      // Only the owner can read; nobody can edit or delete from the web.
+      allow read: if isOwner();
+      allow update, delete: if false;
     }
 
     // Anything not matched above is denied.

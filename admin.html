@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0c0d09">
+<meta name="robots" content="noindex,nofollow">
+<title>Dream Wheels — Entries</title>
+<!-- app-like on iOS home screen -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Entries">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<style>
+  :root{--lime:#93b00b;--lime-br:#aecb1a;--ink:#0c0d09;--card:#15170f}
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  body{margin:0;background:var(--ink);color:#f4f6ee;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.4}
+  .wrap{max-width:1000px;margin:0 auto;padding:16px 14px 60px}
+  h1{font-size:20px;margin:0}
+  .top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:4px}
+  .sub{color:#9aa08c;font-size:12px;margin:0 0 16px}
+  button{font:inherit;cursor:pointer}
+  .btn{background:linear-gradient(135deg,var(--lime-br),var(--lime));color:#0a0c04;border:0;border-radius:11px;padding:13px 18px;font-weight:700;font-size:15px}
+  .btn.ghost{background:transparent;color:#9aa08c;border:1px solid rgba(255,255,255,.18)}
+  .btn.sm{padding:8px 14px;font-size:13px;border-radius:9px}
+
+  /* login card */
+  #login{max-width:360px;margin:14vh auto 0;text-align:center;padding:0 20px}
+  #login h2{font-size:22px;margin:0 0 6px}
+  #login p{color:#9aa08c;font-size:14px;margin:0 0 22px}
+  #login input{width:100%;padding:15px 14px;font-size:16px;border-radius:11px;border:1.5px solid rgba(255,255,255,.15);background:#171b12;color:#fff;margin-bottom:12px}
+  #login .btn{width:100%}
+  #err{color:#ff6a58;font-size:13px;min-height:18px;margin-top:10px}
+  .lock{font-size:34px;margin-bottom:8px}
+
+  /* dashboard */
+  #dash{display:none}
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin:0 0 18px}
+  .stat{background:var(--card);border:1px solid rgba(174,203,26,.2);border-radius:13px;padding:12px 14px}
+  .stat .n{font-size:26px;font-weight:800;color:var(--lime-br);line-height:1}
+  .stat .l{font-size:11px;color:#9aa08c;text-transform:uppercase;letter-spacing:.05em;margin-top:5px}
+  .stat.hot .n{color:#ff8a5b}
+  .panel{background:var(--card);border:1px solid rgba(255,255,255,.08);border-radius:15px;overflow:hidden;margin-bottom:16px}
+  .phead{padding:12px 15px;font-weight:700;font-size:13px;border-bottom:1px solid rgba(255,255,255,.07);letter-spacing:.03em;text-transform:uppercase;color:#dfe3d4}
+
+  /* card list (mobile-first) */
+  .person{padding:13px 15px;border-bottom:1px solid rgba(255,255,255,.06)}
+  .person:last-child{border-bottom:0}
+  .person.lead{background:rgba(255,138,91,.06)}
+  .prow{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+  .pname{font-weight:700;font-size:16px}
+  .pcar{color:#c2c8b4;font-size:14px;margin-top:2px}
+  .pint{font-size:13px;margin-top:6px;color:#dfe3d4}
+  .pill{font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px;white-space:nowrap;margin-left:6px}
+  .pill.hot{background:#ff8a5b;color:#2a0f04}
+  .pill.warm{background:rgba(174,203,26,.22);color:var(--lime-br)}
+  .pmeta{color:#8f9683;font-size:12px;margin-top:6px;word-break:break-word}
+  .pmeta a{color:#aeb4a2}
+  .tix{color:var(--lime-br);font-weight:700;font-size:13px}
+  .empty{padding:40px 15px;text-align:center;color:#9aa08c}
+  .foot{color:#6c7161;font-size:11px;text-align:center;margin-top:14px}
+  .refresh{display:flex;gap:10px;align-items:center;margin-bottom:14px}
+  .spin{display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,.25);border-top-color:var(--lime-br);border-radius:50%;animation:sp .7s linear infinite;vertical-align:-2px}
+  @keyframes sp{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login">
+  <div class="lock">🔒</div>
+  <h2>Entries</h2>
+  <p>Dream Wheels on Eglinton Fest 2026<br>Private — owner sign-in.</p>
+  <form id="loginForm">
+    <input id="pw" type="password" placeholder="Password" autocomplete="current-password" autofocus>
+    <button class="btn" type="submit" id="loginBtn">See entries</button>
+  </form>
+  <div id="err"></div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dash"><div class="wrap">
+  <div class="top">
+    <h1>🏁 Entries</h1>
+    <button class="btn ghost sm" id="signout">Sign out</button>
+  </div>
+  <p class="sub" id="asof"></p>
+
+  <div class="refresh">
+    <button class="btn sm" id="refresh">↻ Refresh</button>
+    <span id="status" class="sub" style="margin:0"></span>
+  </div>
+
+  <div class="stats" id="stats"></div>
+  <div class="panel" id="intentPanel" style="display:none">
+    <div class="phead">What they're interested in</div>
+    <div id="intents" style="padding:12px 15px;display:flex;flex-wrap:wrap;gap:9px"></div>
+  </div>
+  <div class="panel">
+    <div class="phead" id="listHead">Everyone</div>
+    <div id="list"></div>
+  </div>
+  <p class="foot">Private view — only you can see this. Data lives in your Firebase.</p>
+</div></div>
+
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+import { getFirestore, collection, getDocs, query, orderBy } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
+
+// public project identifiers (not secrets — rules enforce access)
+const app = initializeApp({
+  apiKey: 'AIzaSyDaEfxsBIU5dGa7hxWCTvIAE-Br4C4YV8s',
+  authDomain: 'dream-wheels-fest-2026.firebaseapp.com',
+  projectId: 'dream-wheels-fest-2026'
+});
+const auth = getAuth(app);
+const db = getFirestore(app);
+const OWNER_EMAIL = 'owner@dreamwheels.app';   // fixed; you only type the password
+
+const $ = s => document.querySelector(s);
+const loginEl = $('#login'), dashEl = $('#dash');
+
+$('#loginForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  $('#err').textContent = '';
+  $('#loginBtn').textContent = 'Checking…';
+  try {
+    await signInWithEmailAndPassword(auth, OWNER_EMAIL, $('#pw').value);
+  } catch (err) {
+    $('#err').textContent = 'Wrong password — try again.';
+    $('#loginBtn').textContent = 'See entries';
+  }
+});
+$('#signout').addEventListener('click', () => signOut(auth));
+$('#refresh').addEventListener('click', load);
+
+onAuthStateChanged(auth, user => {
+  if (user) { loginEl.style.display = 'none'; dashEl.style.display = 'block'; load(); }
+  else { dashEl.style.display = 'none'; loginEl.style.display = 'block'; $('#pw').value = ''; $('#loginBtn').textContent = 'See entries'; }
+});
+
+const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const RANK = {'Actively looking now':3,'Want a trade-in value':3,'Maybe within a year':2,'Just here for the cars':1};
+const fmt = t => { try { return new Date(t).toLocaleString('en-CA',{timeZone:'America/Toronto',month:'short',day:'numeric',hour:'numeric',minute:'2-digit'}); } catch(e){ return ''; } };
+
+async function load() {
+  $('#status').innerHTML = '<span class="spin"></span> loading…';
+  try {
+    const snap = await getDocs(query(collection(db, 'entries'), orderBy('timestamp')));
+    const rows = snap.docs.map(d => d.data());
+
+    // one person per email, keep most tickets
+    const byEmail = new Map();
+    for (const r of rows) {
+      const k = (r.email||'').trim().toLowerCase() || Math.random();
+      const prev = byEmail.get(k);
+      if (!prev || (r.tickets==='2') > (prev.tickets==='2')) byEmail.set(k, r);
+    }
+    const people = [...byEmail.values()];
+    render(people);
+    $('#status').textContent = '';
+    $('#asof').textContent = 'Updated ' + fmt(Date.now());
+  } catch (err) {
+    $('#status').textContent = 'Could not load: ' + (err.code || err.message);
+  }
+}
+
+function render(people) {
+  const hot = people.filter(r => RANK[r.intent] === 3).length;
+  const followers = people.filter(r => r.followed === 'Yes').length;
+  const emailOk = people.filter(r => r.consent === 'Yes').length;
+  const smsOk = people.filter(r => r.sms === 'Yes' && r.phone).length;
+
+  $('#stats').innerHTML = [
+    ['n', people.length, 'Entered'],
+    ['n hot', hot, '🔥 Leads'],
+    ['n', followers, 'Followers'],
+    ['n', emailOk, 'OK email'],
+    ['n', smsOk, 'OK text']
+  ].map(([c,n,l]) => `<div class="stat ${c.includes('hot')?'hot':''}"><div class="n">${n}</div><div class="l">${l}</div></div>`).join('');
+
+  const counts = {};
+  people.forEach(r => counts[r.intent||'—'] = (counts[r.intent||'—']||0)+1);
+  const ie = Object.entries(counts).sort((a,b)=>b[1]-a[1]);
+  $('#intentPanel').style.display = people.length ? 'block' : 'none';
+  $('#intents').innerHTML = ie.map(([k,v]) => `<span class="pill warm" style="font-size:13px">${esc(k)} · ${v}</span>`).join('');
+
+  const sorted = people.slice().sort((a,b) => (RANK[b.intent]||0)-(RANK[a.intent]||0) || String(b.timestamp).localeCompare(String(a.timestamp)));
+  $('#listHead').textContent = `Everyone (${people.length}) — leads first`;
+  $('#list').innerHTML = people.length ? sorted.map(r => {
+    const rank = RANK[r.intent]||0;
+    const badge = rank===3 ? '<span class="pill hot">🔥 Lead</span>' : rank===2 ? '<span class="pill warm">Maybe</span>' : '';
+    return `<div class="person ${rank===3?'lead':''}">
+      <div class="prow"><div class="pname">${esc(r.first)} ${esc(r.last)}</div><div class="tix">${r.tickets==='2'?'🎟️🎟️':'🎟️'}</div></div>
+      <div class="pcar">${esc(r.car)}</div>
+      <div class="pint">${esc(r.intent)} ${badge}</div>
+      <div class="pmeta"><a href="mailto:${esc(r.email)}">${esc(r.email)}</a>${r.phone?' · <a href="tel:'+esc(r.phone)+'">'+esc(r.phone)+'</a>':''} · ${fmt(r.timestamp)}${r.followed==='Yes'?' · follows':''}</div>
+    </div>`;
+  }).join('') : '<div class="empty">No entries yet — they’ll appear here as people scan and enter.</div>';
+}
+</script>
+</body>
+</html>
